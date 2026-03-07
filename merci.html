@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Merci pour votre activation – votre assistant IA est en cours de configuration.">
+    <title>Merci – DevChatbotIA®</title>
+    <!-- Google Fonts & Font Awesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        /* Mêmes styles que setup.html */
+        :root {
+            --bg-primary: #ffffff;
+            --bg-soft: #faf9f7;
+            --bg-card: #ffffff;
+            --text-primary: #1c1c1e;
+            --text-secondary: #6b6b70;
+            --muted: #8e8e96;
+            --accent-primary: #1a2a27;
+            --accent-secondary: #2c3e3a;
+            --accent-glow: #b89e6f;
+            --success: #1e7e4b;
+            --border-light: #e8e4de;
+            --border-hard: #d4ccc4;
+            --shadow-main: 0 35px 80px -30px rgba(0,0,0,0.12);
+            --shadow-card: 0 20px 50px -20px rgba(0,0,0,0.08);
+            --radius-main: 52px;
+            --radius-small: 28px;
+            --radius-lg: 24px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 32px;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 6vw, 3.8rem);
+            font-weight: 700;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+            color: var(--accent-primary);
+        }
+
+        .lead {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 16px 42px;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 1.05rem;
+            text-decoration: none;
+            cursor: pointer;
+            border: 1px solid rgba(184,158,111,0.3);
+            background: linear-gradient(135deg, var(--accent-primary), #1f332f);
+            color: white;
+            box-shadow: var(--shadow-main), 0 2px 0 0 rgba(0,0,0,0.05);
+            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1);
+            letter-spacing: -0.015em;
+            border: none;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            background: #0f1d1a;
+            border-color: var(--accent-glow);
+            box-shadow: 0 45px 100px -30px rgba(26,42,39,0.3);
+        }
+
+        .btn i {
+            transition: transform 0.2s ease;
+        }
+
+        .btn:hover i {
+            transform: translateX(4px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid var(--accent-primary);
+            color: var(--accent-primary);
+            padding: 10px 26px;
+            font-weight: 500;
+            font-size: 0.98rem;
+            box-shadow: none;
+        }
+
+        .btn-secondary:hover {
+            background: var(--accent-primary);
+            color: white;
+            border-color: transparent;
+            transform: translateY(-2px);
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 20px;
+            border-radius: 999px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            background: rgba(26,42,39,0.03);
+            color: var(--accent-primary);
+            border: 1px solid rgba(184,158,111,0.2);
+            backdrop-filter: blur(2px);
+            margin-bottom: 20px;
+        }
+
+        .thankyou-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-main);
+            padding: 60px 48px;
+            box-shadow: var(--shadow-card);
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .check-icon {
+            font-size: 5rem;
+            color: var(--success);
+            margin-bottom: 20px;
+        }
+
+        /* HEADER / NAVBAR */
+        .navbar-wrapper {
+            background: rgba(255,255,255,0.98);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 0;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            letter-spacing: -0.04em;
+            text-decoration: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            font-weight: 500;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.2s;
+            margin-left: 30px;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-primary);
+        }
+
+        /* FOOTER */
+        .footer {
+            background: var(--bg-soft);
+            color: var(--text-primary);
+            padding: 60px 0 30px;
+            border-radius: 72px 72px 0 0;
+            margin-top: auto;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 60px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .footer-grid { grid-template-columns: 1fr; gap: 40px; }
+        }
+
+        .footer h4 {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .footer a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            display: block;
+            margin-bottom: 12px;
+            transition: color 0.2s;
+        }
+
+        .footer a:hover {
+            color: var(--accent-primary);
+        }
+
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin-bottom: 8px;
+            letter-spacing: -0.05em;
+        }
+
+        .footer-tagline {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+        }
+
+        .footer-contact p {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+        }
+
+        .footer-contact i {
+            color: var(--accent-glow);
+            width: 20px;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--border-light);
+            margin-top: 30px;
+            padding-top: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+
+        .micro-proof {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .micro-proof span {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+        }
+
+        .micro-proof i {
+            color: var(--accent-primary);
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 0 20px; }
+            .thankyou-card { padding: 40px 24px; }
+            .navbar { flex-direction: column; gap: 12px; }
+            .nav-links a { margin: 0 12px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+    <div class="navbar-wrapper">
+        <div class="container">
+            <nav class="navbar">
+                <a href="/" class="logo">DevChatbotIA®</a>
+                <div class="nav-links">
+                    <a href="/#offre">Offre</a>
+                    <a href="/#comment">Comment ça marche</a>
+                    <a href="/#faq">FAQ</a>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <!-- PAGE MERCI -->
+    <div class="container">
+        <div class="thankyou-card">
+            <div class="check-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h1>Merci !</h1>
+            <p class="lead">Votre assistant IA est en cours de configuration.</p>
+            <!-- ✅ Phrase rassurante ajoutée -->
+            <div style="background: var(--bg-soft); border-radius: var(--radius-lg); padding: 24px; margin: 20px 0; text-align: left; border-left: 4px solid var(--accent-glow);">
+                <p style="font-size: 1.05rem; color: var(--text-primary);">
+                    <i class="fas fa-cog" style="color: var(--accent-glow); margin-right: 8px;"></i>
+                    Nous utilisons les informations que vous avez fournies pour configurer votre assistant IA et répondre aux questions les plus fréquentes de vos clients.
+                </p>
+            </div>
+            <div style="margin: 30px 0; color: var(--text-secondary);">
+                <p><i class="fas fa-envelope" style="color: var(--accent-glow); margin-right: 10px;"></i> Vous recevrez un email dès que l’assistant sera prêt (généralement sous 24h).</p>
+                <p style="margin-top: 15px;"><i class="fas fa-clock" style="color: var(--accent-glow); margin-right: 10px;"></i> En attendant, vous pouvez consulter la <a href="/#faq" style="color: var(--accent-primary);">FAQ</a> ou nous contacter.</p>
+            </div>
+            <!-- Bloc remplacé : un seul bouton retour vers l'accueil -->
+            <div style="display:flex; gap:20px; justify-content:center; flex-wrap:wrap; margin-top:30px;">
+                <a href="/" class="btn-secondary">← Retour à l'accueil</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-logo">DevChatbotIA®</div>
+                    <div class="footer-tagline">Agents IA Autonomes® — Solutions d'IA conversationnelle pour commerçants</div>
+                    <div class="footer-contact">
+                        <p><i class="fas fa-envelope"></i> direction@devchatbotia.com</p>
+                        <p><i class="fas fa-phone-alt"></i> 09 81 01 32 07</p>
+                    </div>
+                    <div class="micro-proof">
+                        <span><i class="fas fa-check-circle"></i> Paramétrage inclus</span>
+                        <span><i class="fas fa-check-circle"></i> Sans engagement</span>
+                    </div>
+                </div>
+                <div>
+                    <h4>Légal</h4>
+                    <a href="mentions-legales.html">Mentions légales</a>
+                    <a href="confidentialite.html">Politique de confidentialité</a>
+                    <a href="cgv.html">Conditions générales de vente</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 DevChatbotIA® – Tous droits réservés</p>
+                <p class="tech-badge">Agents IA Autonomes® — technologie propriétaire exclusive</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
