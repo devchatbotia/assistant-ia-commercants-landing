@@ -402,8 +402,8 @@
         </div>
 
         <div class="form-card">
-            <!-- Formulaire modifié : action="/merci.html" method="GET" sans champs cachés Netlify -->
-            <form action="/merci.html" method="GET">
+            <!-- Formulaire modifié : remplacement de action="/merci.html" method="GET" par id="form" -->
+            <form id="form">
 
                 <!-- Champs avec attributs autocomplete et optimisations -->
                 <div class="form-group">
@@ -502,5 +502,42 @@
             </div>
         </div>
     </footer>
+
+    <!-- Script d'envoi du formulaire vers Google Apps Script avec en-tête JSON -->
+    <script>
+        const scriptURL = "https://script.google.com/macros/s/AKfycbz8NusqMVpHdiz1AkP3PBt5BYdNWh9OBu3PHi2piKwfCv_86m9xv-GQhEl_hr5oUiTHBw/exec";
+        const form = document.getElementById("form");
+
+        form.addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            const data = {
+                commerce: form.commerce.value,
+                ville: form.ville.value,
+                activite: form.activite.value,
+                email: form.email.value,
+                telephone: form.telephone.value,
+                site: form.site.value,
+                reservation: form.reservation.value,
+                horaires: form.horaires.value,
+                questions: form.questions.value
+            };
+
+            fetch(scriptURL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                window.location.href = "/merci.html";
+            })
+            .catch(error => {
+                console.error("Erreur envoi formulaire:", error);
+                alert("Une erreur est survenue. Veuillez réessayer.");
+            });
+        });
+    </script>
 </body>
 </html>
