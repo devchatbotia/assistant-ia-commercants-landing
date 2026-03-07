@@ -402,12 +402,8 @@
         </div>
 
         <div class="form-card">
-            <!-- Formulaire avec protections Netlify -->
-            <!-- MODIFICATION : action="/merci.html" au lieu de "/merci" -->
-            <form name="activation-agent" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" action="/merci.html">
-                <!-- Champs cachés obligatoires -->
-                <input type="hidden" name="form-name" value="activation-agent">
-                <input type="hidden" name="bot-field">
+            <!-- Formulaire modifié : action="/merci.html" method="GET" sans champs cachés Netlify -->
+            <form action="/merci.html" method="GET">
 
                 <!-- Champs avec attributs autocomplete et optimisations -->
                 <div class="form-group">
