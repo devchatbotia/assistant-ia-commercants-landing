@@ -176,48 +176,200 @@
             margin: 40px 0;
         }
 
-        .form-group {
-            margin-bottom: 28px;
-        }
-
-        label {
-            font-weight: 600;
-            font-size: 1rem;
-            color: var(--text-primary);
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        input, textarea {
+        /* Styles de la chatbox intégrée (CB108) */
+        .chatbot-container {
+            background: var(--bg-soft);
+            border-radius: var(--radius-lg);
+            padding: 28px 24px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            border: 1px solid var(--border-light);
+            max-width: 100%;
             width: 100%;
+            display: flex;
+            flex-direction: column;
+            font-family: 'Inter', sans-serif;
+        }
+
+        #chatbot-title {
+            color: var(--accent-primary);
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-align: center;
+            letter-spacing: -0.02em;
+        }
+
+        /* Barre de progression */
+        #progress-container {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        #progress-text {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+        #progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--border-light);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        #progress-fill {
+            width: 0%;
+            height: 100%;
+            background: var(--accent-primary);
+            transition: width 0.4s ease;
+        }
+
+        .chat-window {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            min-height: 280px;
+            max-height: 380px;
+            overflow-y: auto;
+            border: 1px solid var(--border-light);
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            scroll-behavior: smooth;
+        }
+
+        /* Messages */
+        .bot-message-wrapper {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            width: 100%;
+            margin: 4px 0;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .bot-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+            border: 1px solid var(--accent-glow);
+            box-shadow: 0 0 0 2px rgba(184,158,111,0.2);
+        }
+
+        .bot-text {
+            background: var(--bg-soft);
+            color: var(--text-primary);
+            padding: 12px 16px;
+            border-radius: 18px 18px 18px 4px;
+            max-width: calc(100% - 50px);
+            word-wrap: break-word;
+            border: 1px solid var(--border-light);
+            font-size: 0.98rem;
+            line-height: 1.5;
+            white-space: pre-line;
+        }
+
+        .message.user {
+            align-self: flex-end;
+            background: var(--accent-primary);
+            color: white;
+            padding: 12px 18px;
+            border-radius: 18px 18px 4px 18px;
+            margin: 4px 0;
+            max-width: 80%;
+            word-wrap: break-word;
+            font-size: 0.98rem;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .input-area {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-top: 8px;
+        }
+
+        .input-area input {
+            flex-grow: 1;
             padding: 14px 18px;
             border: 1px solid var(--border-light);
-            border-radius: 18px;
+            border-radius: 40px;
             font-family: 'Inter', sans-serif;
             font-size: 1rem;
-            background: var(--bg-soft);
+            background: white;
             transition: border 0.2s, box-shadow 0.2s;
         }
 
-        input:focus, textarea:focus {
+        .input-area input:focus {
             outline: none;
             border-color: var(--accent-glow);
             box-shadow: 0 0 0 3px rgba(184,158,111,0.2);
         }
 
-        textarea {
-            min-height: 100px;
-            resize: vertical;
+        .input-area button {
+            background: var(--accent-primary);
+            border: none;
+            color: white;
+            padding: 14px 28px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            box-shadow: var(--shadow-main);
+            border: 1px solid rgba(184,158,111,0.2);
         }
 
-        small {
-            display: block;
-            color: var(--muted);
-            font-size: 0.85rem;
-            margin-top: 5px;
+        .input-area button:hover:not(:disabled) {
+            background: #0f1d1a;
+            transform: translateY(-2px);
         }
 
-        /* HEADER / NAVBAR */
+        .input-area button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Typing indicator */
+        .typing-indicator {
+            display: flex;
+            gap: 5px;
+            padding: 8px 12px;
+            background: var(--bg-soft);
+            border-radius: 30px;
+            width: fit-content;
+            border: 1px solid var(--border-light);
+        }
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-glow);
+            border-radius: 50%;
+            opacity: 0.7;
+            animation: typingBounce 1.4s infinite ease-in-out;
+        }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typingBounce {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-6px); }
+        }
+
+        @media (max-width: 600px) {
+            .form-card { padding: 32px 20px; }
+            .chatbot-container { padding: 20px 16px; }
+            .input-area { flex-wrap: wrap; }
+            .input-area button { width: 100%; }
+        }
+
+        /* HEADER / NAVBAR (inchangé) */
         .navbar-wrapper {
             background: rgba(255,255,255,0.98);
             backdrop-filter: blur(20px);
@@ -252,7 +404,7 @@
             color: var(--accent-primary);
         }
 
-        /* FOOTER */
+        /* FOOTER (inchangé) */
         .footer {
             background: var(--bg-soft);
             color: var(--text-primary);
@@ -353,7 +505,6 @@
 
         @media (max-width: 768px) {
             .container { padding: 0 20px; }
-            .form-card { padding: 32px 24px; }
             .navbar { flex-direction: column; gap: 12px; }
             .nav-links a { margin: 0 12px; }
             .setup-explanation { font-size: 1rem; padding: 14px 18px; }
@@ -377,103 +528,56 @@
         </div>
     </div>
 
-    <!-- PAGE CONFIGURATION : FORMULAIRE D'ACTIVATION -->
+    <!-- PAGE CONFIGURATION : CHATBOX CONVERSATIONNELLE -->
     <div class="container">
         <div style="text-align: center; margin: 40px 0 20px;">
-            <!-- Badge : ⚡ Configuration rapide -->
-            <div class="badge" style="margin: 0 auto;">⚡ Configuration rapide</div>
-            <!-- Titre conservé -->
+            <div class="badge" style="margin: 0 auto;">⚡ Configuration conversationnelle</div>
             <h1>Configurez votre assistant IA</h1>
-            <!-- Sous-titre conservé -->
-            <p class="lead">Fournissez les informations de votre commerce. Nous paramétrons l’agent IA sous 24h.</p>
-            
-            <!-- Bloc explicatif conservé -->
+            <p class="lead">Discutez avec notre agent. Il collecte les infos nécessaires et prépare la configuration.</p>
             <div class="setup-explanation">
                 <i class="fas fa-info-circle" style="margin-right: 8px; color: var(--accent-glow);"></i>
                 Ces informations permettent à l’assistant IA de répondre correctement aux questions de vos clients.
             </div>
-
-            <!-- Mini-section "ce qui va se passer" avec numéros ① ② ③ -->
             <div class="steps-box">
-                <p><i class="fas fa-check-circle"></i> ① Vous remplissez ce formulaire</p>
-                <p><i class="fas fa-cog"></i> ② Nous configurons votre assistant IA</p>
-                <p><i class="fas fa-clock"></i> ③ Votre assistant est prêt sous 24h</p>
+                <p><i class="fas fa-comment-dots"></i> ① Vous répondez aux 9 questions rapides</p>
+                <p><i class="fas fa-cog"></i> ② Nous préparons la configuration de l’IA</p>
+                <p><i class="fas fa-clock"></i> ③ Votre assistant sera prêt sous 24h</p>
             </div>
         </div>
 
         <div class="form-card">
-            <!-- Formulaire modifié : remplacement de action="/merci.html" method="GET" par id="form" -->
-            <form id="form">
-
-                <!-- Champs avec attributs autocomplete et optimisations -->
-                <div class="form-group">
-                    <label for="commerce">Nom du commerce <span style="color: var(--accent-glow);">*</span></label>
-                    <input type="text" id="commerce" name="commerce" placeholder="ex : Boulangerie du Centre" required autocomplete="organization">
+            <div class="chatbot-container" id="chatbot-config">
+                <div id="chatbot-title">Configuration guidée</div>
+                <div id="progress-container">
+                    <div id="progress-text">Question 1 / 9</div>
+                    <div id="progress-bar">
+                        <div id="progress-fill" style="width: 0%;"></div>
+                    </div>
                 </div>
-
-                <div class="form-group">
-                    <label for="ville">Ville <span style="color: var(--accent-glow);">*</span></label>
-                    <input type="text" id="ville" name="ville" placeholder="ex : Lyon" required autocomplete="address-level2">
+                <div class="chat-window" id="chatWindow"></div>
+                <div class="input-area">
+                    <!-- autocomplete="new-password" pour bloquer l'autofill navigateur -->
+                    <input type="text" id="userInput" placeholder="Votre réponse..." autocomplete="new-password">
+                    <button id="sendButton">Envoyer</button>
                 </div>
+            </div>
 
-                <div class="form-group">
-                    <label for="activite">Type d'activité <span style="color: var(--accent-glow);">*</span></label>
-                    <!-- ✅ required ajouté pour correspondre à l'astérisque -->
-                    <input type="text" id="activite" name="activite" placeholder="ex : Restaurant, Coiffeur, Garage…" required>
-                </div>
+            <!-- Micro-preuve sociale -->
+            <p style="text-align:center; font-size:0.9rem; color:var(--text-secondary); margin-top:18px;">
+                +1 000 conversations clients déjà gérées par les assistants IA DevChatbotIA®.
+            </p>
 
-                <div class="form-group">
-                    <label for="email">Email <span style="color: var(--accent-glow);">*</span></label>
-                    <input type="email" id="email" name="email" placeholder="ex : contact@moncommerce.fr" required autocomplete="email">
-                    <small>Nous enverrons la confirmation à cette adresse.</small>
-                </div>
-
-                <div class="form-group">
-                    <label for="telephone">Téléphone ou WhatsApp <span style="color: var(--muted); font-weight: 400;">(optionnel)</span></label>
-                    <input type="tel" id="telephone" name="telephone" placeholder="ex : +33 6 12 34 56 78" autocomplete="tel">
-                    <small>Le numéro où les clients vous joignent habituellement.</small>
-                </div>
-
-                <div class="form-group">
-                    <label for="site">Site web <span style="color: var(--muted); font-weight: 400;">(si vous en avez un)</span></label>
-                    <input type="url" id="site" name="site" placeholder="https://www.moncommerce.fr" autocomplete="url">
-                </div>
-
-                <div class="form-group">
-                    <label for="reservation">Lien de réservation <span style="color: var(--muted); font-weight: 400;">(si vous en avez un)</span></label>
-                    <input type="url" id="reservation" name="reservation" placeholder="ex : calendly.com/moncommerce ou page de contact">
-                    <small>L'assistant pourra envoyer ce lien automatiquement.</small>
-                </div>
-
-                <div class="form-group">
-                    <label for="horaires">Horaires d'ouverture <span style="color: var(--accent-glow);">*</span></label>
-                    <textarea id="horaires" name="horaires" placeholder="ex : Lundi-Vendredi 9h-19h, Samedi 9h-12h" required maxlength="1000"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="questions">Questions fréquentes de vos clients <span style="color: var(--accent-glow);">*</span></label>
-                    <textarea id="questions" name="questions" placeholder="Listez les questions que l'on vous pose souvent (prix, délais, services…)" required maxlength="1000"></textarea>
-                    <small>Exemples : prix d'une coupe, délai de réparation, disponibilité des produits… Plus vous en donnez, plus l'assistant sera pertinent.</small>
-                </div>
-
-                <!-- Bouton optimisé -->
-                <button type="submit" class="btn btn-block">
-                    Activer mon assistant IA <i class="fas fa-arrow-right"></i>
-                </button>
-                <!-- Message de confidentialité -->
-                <p style="font-size:0.85rem; color: var(--muted); text-align: center; margin-top: 20px;">
-                    🔐 Vos données sont confidentielles — uniquement utilisées pour configurer votre assistant.
-                </p>
-            </form>
+            <!-- Message de confidentialité -->
+            <p style="font-size:0.85rem; color: var(--muted); text-align: center; margin-top: 18px;">
+                🔐 Vos données sont confidentielles — uniquement utilisées pour configurer votre assistant IA.
+            </p>
         </div>
 
-        <!-- Mention délai (cohérente avec l'email) -->
         <p style="text-align: center; color: var(--text-secondary);">
             <i class="fas fa-clock" style="color: var(--accent-glow);"></i> Vous recevrez un email dès que l’assistant sera prêt (généralement sous 24h).
         </p>
     </div>
 
-    <!-- FOOTER inchangé -->
     <footer class="footer">
         <div class="container">
             <div class="footer-grid">
@@ -503,28 +607,481 @@
         </div>
     </footer>
 
-    <!-- Script d'envoi du formulaire vers Google Apps Script avec en-tête JSON -->
     <script>
-        const scriptURL = "https://script.google.com/macros/s/AKfycbz8NusqMVpHdiz1AkP3PBt5BYdNWh9OBu3PHi2piKwfCv_86m9xv-GQhEl_hr5oUiTHBw/exec";
-        const form = document.getElementById("form");
+        (function() {
+            // ---------- Configuration Apps Script ----------
+            const scriptURL = "https://script.google.com/macros/s/AKfycbz8NusqMVpHdiz1AkP3PBt5BYdNWh9OBu3PHi2piKwfCv_86m9xv-GQhEl_hr5oUiTHBw/exec";
+            const STORAGE_KEY = "cb108_progress";
 
-        form.addEventListener("submit", function(e) {
-            e.preventDefault();
+            // ---------- État de la conversation ----------
+            const answers = {
+                commerce: "",
+                ville: "",
+                activite: "",
+                email: "",
+                telephone: "",
+                site: "",
+                reservation: "",
+                horaires: "",
+                questions: ""
+            };
 
-            const formData = new FormData(form);
+            // Questions enrichies avec placeholder et type implicite
+            const questions = [
+                { key: "commerce", text: "Quel est le nom de votre commerce ?", placeholder: "ex : Boulangerie Martin", required: true },
+                { key: "ville", text: "Dans quelle ville se trouve votre commerce ?", placeholder: "ex : Lyon", required: true },
+                { key: "activite", text: "Quel est votre type d'activité ? (ex: Restaurant, Coiffeur, Garage...)", placeholder: "ex : Restaurant italien", required: true },
+                { key: "email", text: "Quel est votre email ?", placeholder: "ex : contact@moncommerce.fr", required: true },
+                { key: "telephone", text: "Quel est votre téléphone ou WhatsApp ? (optionnel)", placeholder: "ex : 06 12 34 56 78", required: false },
+                { key: "site", text: "Avez-vous un site web ? (optionnel)", placeholder: "ex : www.moncommerce.fr", required: false },
+                { key: "reservation", text: "Lien de réservation (optionnel) ?", placeholder: "ex : reservio.com/moncommerce", required: false },
+                { key: "horaires", text: "Quels sont vos horaires d'ouverture ?", placeholder: "ex : 9h-12h / 14h-19h", required: true },
+                { key: "questions", text: "Quelles sont les questions fréquentes de vos clients ?", placeholder: "ex : Faites-vous livraison ?", required: true }
+            ];
 
-            fetch(scriptURL, {
-                method: "POST",
-                body: formData
-            })
-            .then(response => {
-                window.location.href = "/merci.html";
-            })
-            .catch(error => {
-                console.error("Erreur envoi formulaire:", error);
-                alert("Une erreur est survenue. Veuillez réessayer.");
+            let step = 0;
+            let busy = false;
+            let isCompleted = false;
+            let activityAnalyzed = false;
+            let firstQuestionDone = false;
+
+            const chatWindow = document.getElementById('chatWindow');
+            const userInput = document.getElementById('userInput');
+            const sendButton = document.getElementById('sendButton');
+            const progressText = document.getElementById('progress-text');
+            const progressFill = document.getElementById('progress-fill');
+            const botAvatarUrl = "https://static.wixstatic.com/media/3c8e1e_7a3928158ec84e608f760ac8664b9bf9~mv2.png";
+
+            // Liste de confirmations aléatoires
+            const confirmations = [
+                "Parfait 👍",
+                "Très bien.",
+                "Merci.",
+                "D'accord.",
+                "Noté."
+            ];
+
+            // ---------- Sauvegarde ----------
+            function saveProgress() {
+                const data = { step, answers, activityAnalyzed, firstQuestionDone };
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            }
+
+            function loadProgress() {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    try {
+                        const data = JSON.parse(saved);
+                        step = data.step || 0;
+                        Object.assign(answers, data.answers || {});
+                        activityAnalyzed = data.activityAnalyzed || false;
+                        firstQuestionDone = data.firstQuestionDone || false;
+                        return true;
+                    } catch (e) {
+                        console.warn("Erreur de lecture localStorage", e);
+                    }
+                }
+                return false;
+            }
+
+            function clearProgress() {
+                localStorage.removeItem(STORAGE_KEY);
+            }
+
+            // ---------- Affichage ----------
+            function appendBotMessage(text, withAvatar = true) {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'bot-message-wrapper';
+                if (withAvatar) {
+                    wrapper.innerHTML = `
+                        <img src="${botAvatarUrl}" alt="IA" class="bot-avatar">
+                        <div class="bot-text">${text}</div>
+                    `;
+                } else {
+                    wrapper.innerHTML = `<div class="bot-text">${text}</div>`;
+                }
+                chatWindow.appendChild(wrapper);
+                scrollToBottom();
+                return wrapper;
+            }
+
+            function appendUserMessage(text) {
+                const msg = document.createElement('div');
+                msg.className = 'message user';
+                msg.textContent = text;
+                chatWindow.appendChild(msg);
+                scrollToBottom();
+            }
+
+            function scrollToBottom() {
+                chatWindow.scrollTop = chatWindow.scrollHeight;
+            }
+
+            function showTypingIndicator() {
+                removeTypingIndicator(); // sécurité anti doublon
+                const indicator = document.createElement('div');
+                indicator.className = 'bot-message-wrapper typing-indicator-wrapper';
+                indicator.id = 'typing-indicator';
+                indicator.innerHTML = `
+                    <img src="${botAvatarUrl}" alt="IA" class="bot-avatar">
+                    <div class="typing-indicator">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                    </div>
+                `;
+                chatWindow.appendChild(indicator);
+                scrollToBottom();
+                return indicator;
+            }
+
+            function removeTypingIndicator() {
+                const indicator = document.getElementById('typing-indicator');
+                if (indicator) indicator.remove();
+            }
+
+            // Mise à jour de la barre de progression : utilise step+1 pour commencer à ~11% dès la première question
+            function updateProgress() {
+                const total = questions.length;
+                const percent = total === 0 ? 0 : ((step + 1) / total) * 100;
+                progressFill.style.width = percent + "%";
+                progressText.innerText = step < total ? `Question ${step + 1} / ${total}` : "Terminé";
+            }
+
+            // ---------- Adaptation du champ input (placeholder et type) ----------
+            function setInputForQuestion(q) {
+                userInput.placeholder = q.placeholder || "Votre réponse...";
+                // Toujours utiliser autocomplete="new-password" pour bloquer l'autofill
+                userInput.setAttribute("autocomplete", "new-password");
+                if (q.key === "email") {
+                    userInput.type = "email";
+                } else if (q.key === "telephone") {
+                    userInput.type = "tel";
+                } else if (q.key === "site" || q.key === "reservation") {
+                    userInput.type = "url";
+                } else {
+                    userInput.type = "text";
+                }
+            }
+
+            // ---------- Pose de la question suivante ----------
+            function askNextQuestion() {
+                if (step < questions.length) {
+                    const q = questions[step];
+                    // Transitions conversationnelles avant certaines questions
+                    if (step === 1 || step === 4) {
+                        const transitions = ["Très bien 👍", "Parfait.", "Continuons.", "Merci."];
+                        const t = transitions[Math.floor(Math.random() * transitions.length)];
+                        appendBotMessage(t);
+                    }
+                    if (q.key === "email") {
+                        // Séquence spéciale pour l'email : message de rassurance puis question
+                        const typing = showTypingIndicator();
+                        setTimeout(() => {
+                            removeTypingIndicator();
+                            appendBotMessage("Nous utilisons votre email uniquement pour vous envoyer l’activation de votre assistant IA.");
+                            const typing2 = showTypingIndicator();
+                            setTimeout(() => {
+                                removeTypingIndicator();
+                                appendBotMessage(q.text);
+                                updateProgress();
+                                setInputForQuestion(q);
+                            }, 900);
+                        }, 600);
+                    } else {
+                        appendBotMessage(q.text);
+                        updateProgress();
+                        setInputForQuestion(q);
+                    }
+                } else {
+                    showSummaryThenFinalize();
+                }
+            }
+
+            // ---------- Envoi partiel des données (lead) dès que l'email est fourni ----------
+            function sendPartialLead() {
+                if (!answers.email) return;
+                const partialData = new URLSearchParams();
+                partialData.append("commerce", answers.commerce || "");
+                partialData.append("ville", answers.ville || "");
+                partialData.append("activite", answers.activite || "");
+                partialData.append("email", answers.email);
+                partialData.append("timestamp", Date.now()); // anti-doublon
+                fetch(scriptURL, {
+                    method: "POST",
+                    body: partialData,
+                    mode: "no-cors"
+                }).catch(err => console.error("Erreur envoi partiel", err));
+            }
+
+            // ---------- Gestion de l'envoi d'une réponse ----------
+            function handleSend() {
+                if (busy || isCompleted) return;
+
+                const userMsg = userInput.value.trim();
+                if (!userMsg) return;
+
+                // Vérification de la longueur pour la question "questions" avant toute action
+                if (step < questions.length) {
+                    const currentQ = questions[step];
+                    if (currentQ.key === "questions" && userMsg.length > 500) {
+                        appendBotMessage("Pouvez-vous résumer en quelques phrases ? (500 caractères maximum)");
+                        userInput.value = '';
+                        userInput.focus();
+                        return;
+                    }
+                }
+
+                appendUserMessage(userMsg);
+                userInput.value = '';
+                userInput.blur(); // Ferme le clavier mobile
+                busy = true;
+                sendButton.disabled = true;
+
+                if (step < questions.length) {
+                    const currentQ = questions[step];
+                    const isRequired = currentQ.required;
+                    const key = currentQ.key;
+
+                    // Validations existantes
+                    if (isRequired && userMsg.length < 3) {
+                        appendBotMessage("Pouvez-vous préciser un peu plus ? (minimum 3 caractères)");
+                        busy = false;
+                        sendButton.disabled = false;
+                        userInput.focus();
+                        return;
+                    }
+
+                    if (key === "email") {
+                        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                        if (!emailRegex.test(userMsg)) {
+                            appendBotMessage("⚠️ Cet email ne semble pas valide. Pouvez-vous vérifier ?");
+                            busy = false;
+                            sendButton.disabled = false;
+                            userInput.focus();
+                            return;
+                        }
+                    }
+
+                    if (key === "telephone" && userMsg !== "") {
+                        const phoneRegex = /^[0-9+ ]{8,15}$/;
+                        if (!phoneRegex.test(userMsg)) {
+                            appendBotMessage("⚠️ Ce numéro ne semble pas correct. Il doit comporter entre 8 et 15 chiffres (espaces et + autorisés).");
+                            busy = false;
+                            sendButton.disabled = false;
+                            userInput.focus();
+                            return;
+                        }
+                    }
+
+                    // Gestion des champs optionnels
+                    if (!isRequired && (key === "site" || key === "reservation" || key === "telephone")) {
+                        const lower = userMsg.toLowerCase();
+                        if (lower === "non" || lower === "aucun" || lower.includes("pas de site") || lower.includes("pas de téléphone") || lower.includes("pas de lien") || lower.includes("pas de réservation")) {
+                            answers[key] = "";
+                        } else {
+                            answers[key] = userMsg;
+                        }
+                    } else {
+                        answers[key] = userMsg;
+                    }
+
+                    // Micro-feedbacks spécifiques
+                    if (key === "email") {
+                        appendBotMessage("Parfait 👍 Nous utiliserons cet email pour vous envoyer l'activation de votre assistant.");
+                        sendPartialLead();
+                    }
+
+                    if (!firstQuestionDone && step === 0) {
+                        firstQuestionDone = true;
+                    }
+
+                    saveProgress();
+                    step++;
+
+                    // Analyse de l'activité (message très court)
+                    if (key === "activite" && !activityAnalyzed) {
+                        activityAnalyzed = true;
+                        const typing = showTypingIndicator();
+                        setTimeout(() => {
+                            removeTypingIndicator();
+                            appendBotMessage("Parfait 👍");
+                            if (firstQuestionDone && step === 2) {
+                                const remaining = questions.length - step;
+                                appendBotMessage(`Plus que ${remaining} questions.`);
+                            }
+                            setTimeout(() => {
+                                if (step < questions.length) {
+                                    askNextQuestion();
+                                } else {
+                                    showSummaryThenFinalize();
+                                }
+                                busy = false;
+                                sendButton.disabled = false;
+                                userInput.focus();
+                                userInput.scrollIntoView({ behavior: "smooth", block: "center" });
+                                saveProgress();
+                            }, 800);
+                        }, 600);
+                        return;
+                    }
+
+                    // Pour les autres questions
+                    const typing = showTypingIndicator();
+                    setTimeout(() => {
+                        removeTypingIndicator();
+
+                        // Miroir de réponse pour commerce et ville
+                        if (key === "commerce") {
+                            appendBotMessage(`Parfait 👍 ${userMsg}.`);
+                        }
+                        if (key === "ville") {
+                            appendBotMessage(`Très bien pour ${userMsg}.`);
+                        }
+
+                        // Messages de progression
+                        if (firstQuestionDone && step === 1) {
+                            appendBotMessage(`Parfait 👍 Plus que ${questions.length - step} questions.`);
+                        }
+                        if (step === 3 && key !== "activite") {
+                            const remaining = questions.length - step;
+                            appendBotMessage(`Super, plus que ${remaining} questions.`);
+                        }
+                        // Confirmation aléatoire pour la 6ème question (step 6), avec protection contre doublon
+                        if (step === 6 && key !== "activite") {
+                            const randomConfirm = confirmations[Math.floor(Math.random() * confirmations.length)];
+                            appendBotMessage(randomConfirm);
+                        }
+
+                        setTimeout(() => {
+                            if (step < questions.length) {
+                                askNextQuestion();
+                            } else {
+                                showSummaryThenFinalize();
+                            }
+                            busy = false;
+                            sendButton.disabled = false;
+                            userInput.focus();
+                            userInput.scrollIntoView({ behavior: "smooth", block: "center" });
+                            saveProgress();
+                        }, 800);
+                    }, 800);
+                } else {
+                    busy = false;
+                    sendButton.disabled = false;
+                }
+            }
+
+            // ---------- Résumé avant finalisation ----------
+            function showSummaryThenFinalize() {
+                const qText = answers.questions || ""; // Protection si undefined
+                const truncatedQuestions = qText.length > 200 ? qText.substring(0, 200) + "…" : qText;
+                const tel = answers.telephone || "Non renseigné";
+                const site = answers.site || "Non renseigné";
+                const reservation = answers.reservation || "Non renseigné";
+
+                const summary = `Parfait 👍\n\nVoici les informations que nous avons enregistrées :\n\nCommerce : ${answers.commerce}\nVille : ${answers.ville}\nActivité : ${answers.activite}\nEmail : ${answers.email}\nTéléphone : ${tel}\nSite web : ${site}\nLien réservation : ${reservation}\nHoraires : ${answers.horaires}\nQuestions fréquentes : ${truncatedQuestions}\n\nNous utilisons ces informations pour préparer votre assistant IA.`;
+
+                appendBotMessage(summary);
+
+                setTimeout(() => {
+                    finalizeConfiguration();
+                }, 3000);
+            }
+
+            // ---------- Finalisation : envoi complet, simulation, redirection ----------
+            function finalizeConfiguration() {
+                isCompleted = true;
+                busy = true;
+                sendButton.disabled = true;
+                userInput.disabled = true;
+
+                progressText.innerText = "Configuration terminée";
+                progressFill.style.width = "100%";
+
+                const formData = new URLSearchParams();
+                for (let [key, value] of Object.entries(answers)) {
+                    formData.append(key, value);
+                }
+                formData.append("timestamp", Date.now());
+
+                fetch(scriptURL, {
+                    method: "POST",
+                    body: formData,
+                    mode: "no-cors"
+                }).catch(err => console.error("Erreur envoi final", err));
+
+                // Messages alignés avec le processus réel
+                setTimeout(() => appendBotMessage("⚙️ Enregistrement de votre demande"), 2000);
+                setTimeout(() => appendBotMessage("⚙️ Préparation de la configuration de votre assistant"), 5000);
+                setTimeout(() => appendBotMessage("⚙️ Transmission des informations à notre équipe"), 8000);
+                setTimeout(() => appendBotMessage("Votre demande a bien été enregistrée.\n\nNous préparons maintenant la configuration de votre assistant IA.\n\nVotre assistant sera prêt sous 24h."), 12000);
+                setTimeout(() => appendBotMessage("Vous allez être redirigé vers la page de confirmation."), 14000);
+                setTimeout(() => {
+                    clearProgress();
+                    window.location.href = "/merci.html";
+                }, 15000);
+            }
+
+            // ---------- Initialisation (reprise ou nouveau) ----------
+            function initChat() {
+                const hasSaved = loadProgress();
+                if (hasSaved && step > 0) {
+                    if (step >= questions.length) {
+                        appendBotMessage("Nous reprenons la configuration là où vous vous étiez arrêté.");
+                        setTimeout(() => showSummaryThenFinalize(), 1200);
+                    } else {
+                        appendBotMessage("Nous reprenons la configuration là où vous vous étiez arrêté.");
+                        updateProgress();
+                        setTimeout(() => {
+                            const q = questions[step];
+                            appendBotMessage(q.text);
+                            setInputForQuestion(q);
+                            busy = false;
+                            sendButton.disabled = false;
+                            userInput.focus();
+                            userInput.scrollIntoView({ behavior: "smooth", block: "center" });
+                        }, 1200);
+                    }
+                } else {
+                    // Nouvelle conversation avec séquence naturelle
+                    appendBotMessage("Bienvenue dans la configuration de votre assistant IA.\n\nNous allons vous poser 9 questions rapides pour comprendre votre commerce.\n\nNous nous occupons ensuite de toute la configuration de votre assistant IA.\n\nCela prend environ 60 secondes.");
+
+                    setTimeout(() => {
+                        const typing1 = showTypingIndicator();
+                        setTimeout(() => {
+                            removeTypingIndicator();
+                            appendBotMessage("Quelques mots suffisent pour chaque réponse.");
+                            const typing2 = showTypingIndicator();
+                            setTimeout(() => {
+                                removeTypingIndicator();
+                                appendBotMessage("Parfait, commençons.");
+                                const typing3 = showTypingIndicator();
+                                setTimeout(() => {
+                                    removeTypingIndicator();
+                                    askNextQuestion();
+                                    busy = false;
+                                    sendButton.disabled = false;
+                                    userInput.focus();
+                                    userInput.scrollIntoView({ behavior: "smooth", block: "center" });
+                                }, 900);
+                            }, 1200);
+                        }, 1200);
+                    }, 800);
+                }
+            }
+
+            // Écouteurs
+            sendButton.addEventListener('click', handleSend);
+            userInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSend();
+                }
             });
-        });
+
+            initChat();
+        })();
     </script>
 </body>
 </html>
