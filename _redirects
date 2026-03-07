@@ -1,7 +1,0 @@
-/merci.html   /merci.html   200
-/setup.html   /setup.html   200
-
-/merci        /merci.html   200
-/setup        /setup.html   200
-
-https://assistant-ia-commercants.netlify.app/* https://commercants.devchatbotia.app/:splat 301!
