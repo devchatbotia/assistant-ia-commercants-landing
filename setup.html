@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Meta description optimisée (SEO + clarté) -->
+    <meta name="description" content="Configurez votre assistant IA DevChatbotIA® en quelques minutes. Fournissez les informations de votre commerce et nous activons votre assistant sous 24h.">
+    <!-- Title cohérent avec l'objectif de la page -->
+    <title>Configuration assistant IA – DevChatbotIA®</title>
+    <!-- Google Fonts & Font Awesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        /* Mêmes styles que précédemment (inchangés) */
+        :root {
+            --bg-primary: #ffffff;
+            --bg-soft: #faf9f7;
+            --bg-card: #ffffff;
+            --text-primary: #1c1c1e;
+            --text-secondary: #6b6b70;
+            --muted: #8e8e96;
+            --accent-primary: #1a2a27;
+            --accent-secondary: #2c3e3a;
+            --accent-glow: #b89e6f;
+            --success: #1e7e4b;
+            --border-light: #e8e4de;
+            --border-hard: #d4ccc4;
+            --shadow-main: 0 35px 80px -30px rgba(0,0,0,0.12);
+            --shadow-card: 0 20px 50px -20px rgba(0,0,0,0.08);
+            --radius-main: 52px;
+            --radius-small: 28px;
+            --radius-lg: 24px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        h1 {
+            font-size: clamp(2.2rem, 5vw, 3.2rem);
+            font-weight: 700;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .lead {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .setup-explanation {
+            font-size: 1.1rem;
+            color: var(--accent-primary);
+            background: rgba(184,158,111,0.08);
+            padding: 16px 24px;
+            border-radius: 48px;
+            margin: 20px auto 30px;
+            max-width: 700px;
+            font-weight: 500;
+            border: 1px solid rgba(184,158,111,0.2);
+            backdrop-filter: blur(2px);
+        }
+
+        .steps-box {
+            background: var(--bg-soft);
+            border-radius: var(--radius-lg);
+            padding: 24px 28px;
+            margin: 25px auto 30px;
+            max-width: 600px;
+            text-align: left;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-card);
+        }
+
+        .steps-box p {
+            margin: 12px 0;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .steps-box i {
+            color: var(--accent-glow);
+            font-size: 1.3rem;
+            width: 28px;
+            text-align: center;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 16px 42px;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 1.05rem;
+            text-decoration: none;
+            cursor: pointer;
+            border: 1px solid rgba(184,158,111,0.3);
+            background: linear-gradient(135deg, var(--accent-primary), #1f332f);
+            color: white;
+            box-shadow: var(--shadow-main), 0 2px 0 0 rgba(0,0,0,0.05);
+            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1);
+            letter-spacing: -0.015em;
+            border: none;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            background: #0f1d1a;
+            border-color: var(--accent-glow);
+            box-shadow: 0 45px 100px -30px rgba(26,42,39,0.3);
+        }
+
+        .btn i {
+            transition: transform 0.2s ease;
+        }
+
+        .btn:hover i {
+            transform: translateX(4px);
+        }
+
+        .btn-block {
+            width: 100%;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 20px;
+            border-radius: 999px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            background: rgba(26,42,39,0.03);
+            color: var(--accent-primary);
+            border: 1px solid rgba(184,158,111,0.2);
+            backdrop-filter: blur(2px);
+            margin-bottom: 20px;
+        }
+
+        .form-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-main);
+            padding: 48px 40px;
+            box-shadow: var(--shadow-card);
+            margin: 40px 0;
+        }
+
+        .form-group {
+            margin-bottom: 28px;
+        }
+
+        label {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--text-primary);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border: 1px solid var(--border-light);
+            border-radius: 18px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            background: var(--bg-soft);
+            transition: border 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent-glow);
+            box-shadow: 0 0 0 3px rgba(184,158,111,0.2);
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        small {
+            display: block;
+            color: var(--muted);
+            font-size: 0.85rem;
+            margin-top: 5px;
+        }
+
+        /* HEADER / NAVBAR */
+        .navbar-wrapper {
+            background: rgba(255,255,255,0.98);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 0;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            letter-spacing: -0.04em;
+            text-decoration: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            font-weight: 500;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.2s;
+            margin-left: 30px;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-primary);
+        }
+
+        /* FOOTER */
+        .footer {
+            background: var(--bg-soft);
+            color: var(--text-primary);
+            padding: 60px 0 30px;
+            border-radius: 72px 72px 0 0;
+            margin-top: 60px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 60px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .footer-grid { grid-template-columns: 1fr; gap: 40px; }
+        }
+
+        .footer h4 {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .footer a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            display: block;
+            margin-bottom: 12px;
+            transition: color 0.2s;
+        }
+
+        .footer a:hover {
+            color: var(--accent-primary);
+        }
+
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin-bottom: 8px;
+            letter-spacing: -0.05em;
+        }
+
+        .footer-tagline {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+        }
+
+        .footer-contact p {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+        }
+
+        .footer-contact i {
+            color: var(--accent-glow);
+            width: 20px;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--border-light);
+            margin-top: 30px;
+            padding-top: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+
+        .micro-proof {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .micro-proof span {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+        }
+
+        .micro-proof i {
+            color: var(--accent-primary);
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 0 20px; }
+            .form-card { padding: 32px 24px; }
+            .navbar { flex-direction: column; gap: 12px; }
+            .nav-links a { margin: 0 12px; }
+            .setup-explanation { font-size: 1rem; padding: 14px 18px; }
+            .steps-box { padding: 18px 20px; }
+            .steps-box p { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+    <div class="navbar-wrapper">
+        <div class="container">
+            <nav class="navbar">
+                <a href="/" class="logo">DevChatbotIA®</a>
+                <div class="nav-links">
+                    <a href="/#offre">Offre</a>
+                    <a href="/#comment">Comment ça marche</a>
+                    <a href="/#faq">FAQ</a>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <!-- PAGE CONFIGURATION : FORMULAIRE D'ACTIVATION -->
+    <div class="container">
+        <div style="text-align: center; margin: 40px 0 20px;">
+            <!-- Badge : ⚡ Configuration rapide -->
+            <div class="badge" style="margin: 0 auto;">⚡ Configuration rapide</div>
+            <!-- Titre conservé -->
+            <h1>Configurez votre assistant IA</h1>
+            <!-- Sous-titre conservé -->
+            <p class="lead">Fournissez les informations de votre commerce. Nous paramétrons l’agent IA sous 24h.</p>
+            
+            <!-- Bloc explicatif conservé -->
+            <div class="setup-explanation">
+                <i class="fas fa-info-circle" style="margin-right: 8px; color: var(--accent-glow);"></i>
+                Ces informations permettent à l’assistant IA de répondre correctement aux questions de vos clients.
+            </div>
+
+            <!-- Mini-section "ce qui va se passer" avec numéros ① ② ③ -->
+            <div class="steps-box">
+                <p><i class="fas fa-check-circle"></i> ① Vous remplissez ce formulaire</p>
+                <p><i class="fas fa-cog"></i> ② Nous configurons votre assistant IA</p>
+                <p><i class="fas fa-clock"></i> ③ Votre assistant est prêt sous 24h</p>
+            </div>
+        </div>
+
+        <div class="form-card">
+            <!-- Formulaire avec protections Netlify -->
+            <form name="activation-agent" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" action="/merci">
+                <!-- Champs cachés obligatoires -->
+                <input type="hidden" name="form-name" value="activation-agent">
+                <input type="hidden" name="bot-field">
+
+                <!-- Champs avec attributs autocomplete et optimisations -->
+                <div class="form-group">
+                    <label for="commerce">Nom du commerce <span style="color: var(--accent-glow);">*</span></label>
+                    <input type="text" id="commerce" name="commerce" placeholder="ex : Boulangerie du Centre" required autocomplete="organization">
+                </div>
+
+                <div class="form-group">
+                    <label for="ville">Ville <span style="color: var(--accent-glow);">*</span></label>
+                    <input type="text" id="ville" name="ville" placeholder="ex : Lyon" required autocomplete="address-level2">
+                </div>
+
+                <div class="form-group">
+                    <label for="activite">Type d'activité <span style="color: var(--accent-glow);">*</span></label>
+                    <!-- ✅ required ajouté pour correspondre à l'astérisque -->
+                    <input type="text" id="activite" name="activite" placeholder="ex : Restaurant, Coiffeur, Garage…" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email <span style="color: var(--accent-glow);">*</span></label>
+                    <input type="email" id="email" name="email" placeholder="ex : contact@moncommerce.fr" required autocomplete="email">
+                    <small>Nous enverrons la confirmation à cette adresse.</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="telephone">Téléphone ou WhatsApp <span style="color: var(--muted); font-weight: 400;">(optionnel)</span></label>
+                    <input type="tel" id="telephone" name="telephone" placeholder="ex : +33 6 12 34 56 78" autocomplete="tel">
+                    <small>Le numéro où les clients vous joignent habituellement.</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="site">Site web <span style="color: var(--muted); font-weight: 400;">(si vous en avez un)</span></label>
+                    <input type="url" id="site" name="site" placeholder="https://www.moncommerce.fr" autocomplete="url">
+                </div>
+
+                <div class="form-group">
+                    <label for="reservation">Lien de réservation <span style="color: var(--muted); font-weight: 400;">(si vous en avez un)</span></label>
+                    <input type="url" id="reservation" name="reservation" placeholder="ex : calendly.com/moncommerce ou page de contact">
+                    <small>L'assistant pourra envoyer ce lien automatiquement.</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="horaires">Horaires d'ouverture <span style="color: var(--accent-glow);">*</span></label>
+                    <textarea id="horaires" name="horaires" placeholder="ex : Lundi-Vendredi 9h-19h, Samedi 9h-12h" required maxlength="1000"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="questions">Questions fréquentes de vos clients <span style="color: var(--accent-glow);">*</span></label>
+                    <textarea id="questions" name="questions" placeholder="Listez les questions que l'on vous pose souvent (prix, délais, services…)" required maxlength="1000"></textarea>
+                    <small>Exemples : prix d'une coupe, délai de réparation, disponibilité des produits… Plus vous en donnez, plus l'assistant sera pertinent.</small>
+                </div>
+
+                <!-- Bouton optimisé -->
+                <button type="submit" class="btn btn-block">
+                    Activer mon assistant IA <i class="fas fa-arrow-right"></i>
+                </button>
+                <!-- Message de confidentialité -->
+                <p style="font-size:0.85rem; color: var(--muted); text-align: center; margin-top: 20px;">
+                    🔐 Vos données sont confidentielles — uniquement utilisées pour configurer votre assistant.
+                </p>
+            </form>
+        </div>
+
+        <!-- Mention délai (cohérente avec l'email) -->
+        <p style="text-align: center; color: var(--text-secondary);">
+            <i class="fas fa-clock" style="color: var(--accent-glow);"></i> Vous recevrez un email dès que l’assistant sera prêt (généralement sous 24h).
+        </p>
+    </div>
+
+    <!-- FOOTER inchangé -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-logo">DevChatbotIA®</div>
+                    <div class="footer-tagline">Agents IA Autonomes® — Solutions d'IA conversationnelle pour commerçants</div>
+                    <div class="footer-contact">
+                        <p><i class="fas fa-envelope"></i> direction@devchatbotia.com</p>
+                        <p><i class="fas fa-phone-alt"></i> 09 81 01 32 07</p>
+                    </div>
+                    <div class="micro-proof">
+                        <span><i class="fas fa-check-circle"></i> Paramétrage inclus</span>
+                        <span><i class="fas fa-check-circle"></i> Sans engagement</span>
+                    </div>
+                </div>
+                <div>
+                    <h4>Légal</h4>
+                    <a href="mentions-legales.html">Mentions légales</a>
+                    <a href="confidentialite.html">Politique de confidentialité</a>
+                    <a href="cgv.html">Conditions générales de vente</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 DevChatbotIA® – Tous droits réservés</p>
+                <p class="tech-badge">Agents IA Autonomes® — technologie propriétaire exclusive</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
