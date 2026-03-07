@@ -511,24 +511,11 @@
         form.addEventListener("submit", function(e) {
             e.preventDefault();
 
-            const data = {
-                commerce: form.commerce.value,
-                ville: form.ville.value,
-                activite: form.activite.value,
-                email: form.email.value,
-                telephone: form.telephone.value,
-                site: form.site.value,
-                reservation: form.reservation.value,
-                horaires: form.horaires.value,
-                questions: form.questions.value
-            };
+            const formData = new FormData(form);
 
             fetch(scriptURL, {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(data)
+                body: formData
             })
             .then(response => {
                 window.location.href = "/merci.html";
