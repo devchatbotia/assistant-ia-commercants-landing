@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Meta description corrigée -->
     <meta name="description" content="Assistant IA pour commerçants : répond aux questions de vos clients 24h/24 (horaires, prix, réservations). Activation simple, 19€/mois sans engagement.">
+    <!-- Meta keywords pour SEO / Google Ads -->
+    <meta name="keywords" content="assistant IA commerçant, chatbot commerçant, IA pour commerce, répondre clients automatiquement, assistant IA boutique">
     <!-- CANONICAL & ROBOTS -->
     <link rel="canonical" href="https://commercants.devchatbotia.app/">
     <meta name="robots" content="index, follow">
@@ -13,7 +15,10 @@
     <meta property="og:description" content="Un assistant IA qui répond aux questions de vos clients 24h/24 (horaires, prix, réservations). 19€/mois sans engagement.">
     <meta property="og:url" content="https://commercants.devchatbotia.app/">
     <meta property="og:type" content="website">
-    <meta property="og:image" content="https://commercants.devchatbotia.app/og-commercants.jpg">
+    <!-- Nouvel og:image (remplacé) -->
+    <meta property="og:image" content="https://static.wixstatic.com/media/3c8e1e_71d4fdd68a914813b1728aa8ad2e1703~mv2.webp">
+    <!-- Ajout og:site_name pour le SEO -->
+    <meta property="og:site_name" content="DevChatbotIA">
     <!-- Author -->
     <meta name="author" content="DevChatbotIA®">
     <title>Assistant IA pour commerçants – DevChatbotIA®</title>
@@ -79,7 +84,7 @@
             font-weight: 700;
             line-height: 1.05;
             letter-spacing: -0.03em;
-            margin-bottom: 1.8rem;
+            margin-bottom: 0.8rem; /* réduit de 1.8rem */
             color: var(--text-primary);
         }
 
@@ -222,7 +227,7 @@
 
         /* LAYOUT */
         .section {
-            padding: 120px 0;
+            padding: 60px 0;  /* modifié de 120px à 60px */
             position: relative;
         }
 
@@ -242,7 +247,7 @@
             background: var(--bg-card);
             border: 1px solid var(--border-light);
             border-radius: var(--radius-main);
-            padding: 48px 40px;
+            padding: 36px 28px;
             box-shadow: var(--shadow-card);
             transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
             position: relative;
@@ -255,7 +260,7 @@
             border-color: var(--accent-glow);
         }
 
-        /* HEADER */
+        /* HEADER (navbar simplifiée, sans logo) */
         .navbar-wrapper {
             position: sticky;
             top: 0;
@@ -267,17 +272,9 @@
 
         .navbar {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-end; /* pousse les liens à droite */
             align-items: center;
-            padding: 18px 0;
-        }
-
-        .logo {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--accent-primary);
-            letter-spacing: -0.04em;
-            text-decoration: none;
+            padding: 10px 0; /* padding réduit */
         }
 
         .nav-links {
@@ -304,7 +301,7 @@
             grid-template-columns: 1.1fr 1fr;
             gap: 100px;
             align-items: center;
-            padding: 40px 0 80px;
+            padding: 10px 0 40px; /* top réduit à 10px */
         }
 
         .hero > div:first-child {
@@ -515,7 +512,7 @@
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             gap: 24px;
-            margin: 80px 0 40px;
+            margin: 50px 0 20px;
         }
 
         @media (max-width: 1024px) {
@@ -570,7 +567,7 @@
             background: linear-gradient(135deg, var(--bg-soft), white);
             border: 1px solid var(--border-light);
             border-radius: var(--radius-main);
-            padding: 72px 46px;
+            padding: 45px 30px;  /* modifié de 72px 46px */
             text-align: center;
             box-shadow: var(--shadow-main);
             position: relative;
@@ -731,7 +728,7 @@
         .cta-section {
             background: linear-gradient(145deg, var(--bg-soft), #ffffff);
             border-radius: var(--radius-main);
-            padding: 70px 40px;
+            padding: 45px 30px;  /* modifié de 70px 40px */
             text-align: center;
             margin: 40px 0 20px;
             border: 1px solid var(--border-light);
@@ -960,14 +957,14 @@
         /* ===== AJUSTEMENT SPACING HERO DESKTOP UNIQUEMENT ===== */
         @media (min-width: 1025px) {
             section.section:first-of-type {
-                padding-top: 80px !important;
+                padding-top: 20px !important; /* encore réduit */
             }
         }
 
         /* ===== AJUSTEMENT SPACING SECTIONS DESKTOP (CONSIGNES) ===== */
         @media (min-width: 1025px) {
             .section {
-                padding: 90px 0 !important;
+                padding: 55px 0 !important;
             }
         }
 
@@ -990,12 +987,12 @@
             
             /* 3️⃣ Paddings verticaux réduits sur mobile (compactage) */
             .section {
-                padding: 60px 0 !important;
+                padding: 50px 0 !important; /* réduit de 60px */
             }
             
             /* 4️⃣ Hero moins haut sur mobile */
             .hero {
-                padding: 20px 0 40px !important;
+                padding: 10px 0 30px !important;
             }
             
             /* 5️⃣ Footer moins haut sur mobile */
@@ -1057,11 +1054,14 @@
     </style>
 </head>
 <body class="no-js">
-    <!-- NAVBAR -->
+    <!-- H1 invisible pour le SEO -->
+    <h1 style="display:none;">Assistant IA pour commerçants – répondre automatiquement aux clients 24h/24</h1>
+
+    <!-- NAVBAR (sans logo) -->
     <div class="navbar-wrapper">
         <div class="container">
             <nav class="navbar" id="navbar">
-                <a href="/" class="logo">DevChatbotIA®</a>
+                <!-- Le logo a été supprimé, il ne reste que les liens -->
                 <div class="nav-links">
                     <a href="#probleme">Problème</a>
                     <a href="#solution">Solution</a>
@@ -1086,13 +1086,15 @@
                     <p class="lead">Votre assistant IA répond aux questions de vos clients (horaires, prix, disponibilités) et peut envoyer votre lien de réservation. 24h/24.</p>
                     <div style="margin: 30px 0 20px; display: flex; gap: 20px; flex-wrap: wrap;">
                         <span style="display: flex; align-items: center; gap: 6px; font-size: 0.95rem; color: var(--text-secondary);"><i class="fas fa-check-circle" style="color: var(--accent-primary);"></i> Édité par DevChatbotIA®</span>
-                        <span style="display: flex; align-items: center; gap: 6px; font-size: 0.95rem; color: var(--text-secondary);"><i class="fas fa-check-circle" style="color: var(--accent-primary);"></i> Solution développée en France · Marques déposées</span>
+                        <span style="display: flex; align-items: center; gap: 6px; font-size: 0.95rem; color: var(--text-secondary);"><i class="fas fa-check-circle" style="color: var(--accent-primary);"></i> Technologie DevChatbotIA® développée en France</span>
                     </div>
                     <div style="margin: 20px 0 10px;">
-                        <!-- BOUTON STRIPE PRINCIPAL -->
-                        <a href="https://buy.stripe.com/dRmcN52YVdPv6qR0re9AA06" class="btn-stripe">
-                           Activer mon assistant <i class="fas fa-arrow-right"></i>
+                        <!-- BOUTON STRIPE PRINCIPAL (tracking source + texte unifié) avec target="_blank" et rel="noopener" -->
+                        <a href="https://buy.stripe.com/dRmcN52YVdPv6qR0re9AA06?source=commercants" class="btn-stripe" target="_blank" rel="noopener">
+                           Activer mon assistant IA <i class="fas fa-arrow-right"></i>
                         </a>
+                        <!-- Rappel du prix sous le bouton -->
+                        <p style="font-size:1rem; font-weight:500; margin-top:5px;">19€/mois – sans engagement</p>
                         <p style="font-size:0.9rem; color: var(--muted); margin-top:12px;">
                             🔒 Paiement sécurisé Stripe · Sans engagement · Activation immédiate
                         </p>
@@ -1133,6 +1135,30 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <!-- NOUVEAU BLOC : PREUVE SOCIALE (juste après le hero) -->
+    <section class="section">
+        <div class="container" style="text-align: center; max-width: 900px; margin: 0 auto;">
+            <div class="badge" style="margin: 0 auto;">Déjà utilisé</div>
+            <h2>Déjà utilisé par des commerçants</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 18px; font-size:1.1rem;">
+                Plus de <strong>1000 conversations clients automatisées</strong> avec les assistants DevChatbotIA®.
+            </p>
+            <p style="color: var(--text-secondary); margin-bottom: 30px;">
+                Les assistants répondent aux demandes clients et facilitent les réservations.
+            </p>
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; font-weight: 500;">
+                <span>💇‍♂️ Salons de coiffure</span>
+                <span>💅 Instituts de beauté</span>
+                <span>🧘 Cabinets de soins</span>
+                <span>🔧 Artisans</span>
+                <span>🏪 Commerces de proximité</span>
+            </div>
+            <p style="font-size:0.95rem;color:var(--muted);margin-top:20px;">
+                Utilisé par des commerces locaux et indépendants.
+            </p>
         </div>
     </section>
 
@@ -1290,6 +1316,39 @@
         </div>
     </section>
 
+    <!-- ===== NOUVEAU BLOC RÉASSURANCE AVANT PRIX ===== -->
+    <section class="section">
+        <div class="container" style="max-width:900px; margin:auto; text-align:center;">
+            <div class="badge" style="margin:0 auto;">Simple et transparent</div>
+            <h2>Pourquoi les commerçants adoptent cet assistant IA</h2>
+            <p style="color:var(--text-secondary); margin-bottom:40px;">
+                Une solution simple pour répondre aux clients sans complexité technique.
+            </p>
+            <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:20px; max-width:700px; margin:auto;">
+                <div class="card" style="padding:30px 20px;">
+                    <i class="fas fa-check-circle" style="font-size:1.5rem;color:var(--accent-primary);"></i>
+                    <p style="margin-top:10px;font-weight:600;">Activation simple</p>
+                    <p style="font-size:0.95rem;color:var(--text-secondary);">configuration rapide de votre assistant</p>
+                </div>
+                <div class="card" style="padding:30px 20px;">
+                    <i class="fas fa-check-circle" style="font-size:1.5rem;color:var(--accent-primary);"></i>
+                    <p style="margin-top:10px;font-weight:600;">Sans engagement</p>
+                    <p style="font-size:0.95rem;color:var(--text-secondary);">vous pouvez arrêter à tout moment</p>
+                </div>
+                <div class="card" style="padding:30px 20px;">
+                    <i class="fas fa-check-circle" style="font-size:1.5rem;color:var(--accent-primary);"></i>
+                    <p style="margin-top:10px;font-weight:600;">Configuration incluse</p>
+                    <p style="font-size:0.95rem;color:var(--text-secondary);">nous paramétrons l'assistant avec vous</p>
+                </div>
+                <div class="card" style="padding:30px 20px;">
+                    <i class="fas fa-check-circle" style="font-size:1.5rem;color:var(--accent-primary);"></i>
+                    <p style="margin-top:10px;font-weight:600;">Support disponible</p>
+                    <p style="font-size:0.95rem;color:var(--text-secondary);">nous restons disponibles si besoin</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- OFFRE UNIQUE 19€ -->
     <section id="offre" class="section">
         <div class="container">
@@ -1304,6 +1363,7 @@
                         <span class="amount">19€</span>
                         <span class="period">/mois</span>
                     </div>
+                    <span style="font-size:0.9rem;color:var(--muted);display:block;margin-top:-10px;margin-bottom:10px;">moins qu’un café par jour</span>
                     <p style="color: var(--text-secondary); margin-bottom: 20px;">Paramétrage standard inclus · Résiliation à tout moment</p>
                     <ul class="check-list">
                         <li><i class="fas fa-check-circle"></i> Assistant IA disponible 24h/24</li>
@@ -1313,10 +1373,25 @@
                         <li><i class="fas fa-check-circle"></i> Tableau de bord simple pour suivre les demandes</li>
                         <li><i class="fas fa-check-circle"></i> Paramétrage standard de l'assistant (questions clés sur votre activité)</li>
                     </ul>
-                    <a href="https://buy.stripe.com/dRmcN52YVdPv6qR0re9AA06" class="btn-stripe" style="margin-top: 30px; width: 100%; text-align: center;">
+
+                    <!-- ===== BLOC RISK REVERSAL ===== -->
+                    <div style="margin-top:30px; padding:20px; background:#faf9f7; border-radius:16px; border:1px solid var(--border-light);">
+                        <p style="font-weight:600; margin-bottom:10px;">Aucun risque.</p>
+                        <p style="font-size:0.95rem;color:var(--text-secondary);line-height:1.6;">
+                            ✔ activation rapide<br>
+                            ✔ résiliation possible à tout moment<br>
+                            ✔ configuration incluse<br>
+                            ✔ support disponible si besoin
+                        </p>
+                    </div>
+
+                    <a href="https://buy.stripe.com/dRmcN52YVdPv6qR0re9AA06?source=commercants" class="btn-stripe" style="margin-top: 30px; width: 100%; text-align: center;" target="_blank" rel="noopener">
                         Activer mon assistant IA <i class="fas fa-arrow-right"></i>
                     </a>
-                    <p style="font-size:0.85rem; color: var(--muted); margin-top: 20px;">🔒 Paiement sécurisé Stripe</p>
+                    <p style="font-size:0.85rem; color: var(--muted); margin-top: 20px;">
+                        🔒 Paiement sécurisé Stripe<br>
+                        <span style="font-size:0.9rem;">Activation en moins de 24h.</span>
+                    </p>
                 </div>
             </div>
 
@@ -1361,7 +1436,7 @@
             <div class="cta-section">
                 <h3>Prêt à ne plus laisser de client sans réponse ?</h3>
                 <p>Activez votre assistant IA dès maintenant, paramétrage inclus.</p>
-                <a href="https://buy.stripe.com/dRmcN52YVdPv6qR0re9AA06" class="btn-stripe" style="padding: 20px 50px; font-size: 1.2rem;">
+                <a href="https://buy.stripe.com/dRmcN52YVdPv6qR0re9AA06?source=commercants" class="btn-stripe" style="padding: 20px 50px; font-size: 1.2rem;" target="_blank" rel="noopener">
                    Activer mon assistant IA <i class="fas fa-arrow-right"></i>
                 </a>
                 <p style="margin-top: 25px; font-size: 0.95rem; color: var(--muted);">🔒 Paiement sécurisé Stripe · Sans engagement · Activation immédiate</p>
@@ -1407,9 +1482,9 @@
         </div>
     </footer>
 
-    <!-- Sticky CTA mobile - lien Stripe -->
+    <!-- Sticky CTA mobile - lien Stripe (tracking source) -->
     <div class="sticky-cta">
-        <a href="https://buy.stripe.com/dRmcN52YVdPv6qR0re9AA06" class="btn-stripe">
+        <a href="https://buy.stripe.com/dRmcN52YVdPv6qR0re9AA06?source=commercants" class="btn-stripe" target="_blank" rel="noopener">
            Activer mon assistant IA
         </a>
     </div>
