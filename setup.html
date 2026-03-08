@@ -609,8 +609,30 @@
 
     <script>
         (function() {
-            // ---------- Configuration Apps Script ----------
-            const scriptURL = "https://script.google.com/macros/s/AKfycbz8NusqMVpHdiz1AkP3PBt5BYdNWh9OBu3PHi2piKwfCv_86m9xv-GQhEl_hr5oUiTHBw/exec";
+            // ---------- Configuration backend (logging uniquement) ----------
+            const backendURL = "https://chatbot-backend-jgnn.onrender.com/chat";  // endpoint /chat
+            // Authentification Basic sans exposer directement les identifiants
+            const basicAuth = "Basic " + btoa("botuser:motdepasseultrasecret");
+
+            // Fonction centralisée d'envoi au backend (logging)
+            function sendToBackend(message) {
+                fetch(backendURL, {
+                    method: "POST",
+                    mode: "cors",
+                    keepalive: true,  // ← assure que la requête se termine même si la page est quittée
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": basicAuth
+                    },
+                    body: JSON.stringify({
+                        chatbot_id: "CB108",
+                        message: message
+                    })
+                })
+                .then(res => res.text())  // on lit comme texte pour éviter les erreurs JSON si réponse vide
+                .catch(error => console.error("Backend logging error:", error));
+            }
+
             const STORAGE_KEY = "cb108_progress";
 
             // ---------- État de la conversation ----------
@@ -801,17 +823,15 @@
             // ---------- Envoi partiel des données (lead) dès que l'email est fourni ----------
             function sendPartialLead() {
                 if (!answers.email) return;
-                const partialData = new URLSearchParams();
-                partialData.append("commerce", answers.commerce || "");
-                partialData.append("ville", answers.ville || "");
-                partialData.append("activite", answers.activite || "");
-                partialData.append("email", answers.email);
-                partialData.append("timestamp", Date.now()); // anti-doublon
-                fetch(scriptURL, {
-                    method: "POST",
-                    body: partialData,
-                    mode: "no-cors"
-                }).catch(err => console.error("Erreur envoi partiel", err));
+                const partialData = {
+                    commerce: answers.commerce || "",
+                    ville: answers.ville || "",
+                    activite: answers.activite || "",
+                    email: answers.email,
+                    timestamp: Date.now()
+                };
+                // Utilisation de la fonction centralisée de logging
+                sendToBackend("Partial lead: " + JSON.stringify(partialData));
             }
 
             // ---------- Gestion de l'envoi d'une réponse ----------
@@ -833,6 +853,9 @@
                 }
 
                 appendUserMessage(userMsg);
+                // Logger chaque réponse utilisateur
+                sendToBackend(userMsg);
+
                 userInput.value = '';
                 userInput.blur(); // Ferme le clavier mobile
                 busy = true;
@@ -999,17 +1022,21 @@
                 progressText.innerText = "Configuration terminée";
                 progressFill.style.width = "100%";
 
-                const formData = new URLSearchParams();
-                for (let [key, value] of Object.entries(answers)) {
-                    formData.append(key, value);
-                }
-                formData.append("timestamp", Date.now());
+                const formData = {
+                    commerce: answers.commerce,
+                    ville: answers.ville,
+                    activite: answers.activite,
+                    email: answers.email,
+                    telephone: answers.telephone,
+                    site: answers.site,
+                    reservation: answers.reservation,
+                    horaires: answers.horaires,
+                    questions: answers.questions,
+                    timestamp: Date.now()
+                };
 
-                fetch(scriptURL, {
-                    method: "POST",
-                    body: formData,
-                    mode: "no-cors"
-                }).catch(err => console.error("Erreur envoi final", err));
+                // Envoi du résumé final au backend
+                sendToBackend("CONFIGURATION COMPLETE : " + JSON.stringify(formData));
 
                 // Messages alignés avec le processus réel
                 setTimeout(() => appendBotMessage("⚙️ Enregistrement de votre demande"), 2000);
