@@ -610,11 +610,13 @@
     <script>
         (function() {
             // ---------- Configuration backend (logging uniquement) ----------
-            const backendURL = "https://chatbot-backend-jgnn.onrender.com/chat";  // endpoint /chat
+            // ✅ Correction 1 : endpoint racine (/) au lieu de /chat
+            const backendURL = "https://chatbot-backend-jgnn.onrender.com";  // maintenant /
             // Authentification Basic sans exposer directement les identifiants
             const basicAuth = "Basic " + btoa("botuser:motdepasseultrasecret");
 
             // Fonction centralisée d'envoi au backend (logging)
+            // ✅ Correction 2 : ajout du champ email et passage à .json()
             function sendToBackend(message) {
                 fetch(backendURL, {
                     method: "POST",
@@ -626,10 +628,11 @@
                     },
                     body: JSON.stringify({
                         chatbot_id: "CB108",
-                        message: message
+                        message: message,
+                        email: "setup@devchatbotia.com"   // email technique pour le logging
                     })
                 })
-                .then(res => res.text())  // on lit comme texte pour éviter les erreurs JSON si réponse vide
+                .then(res => res.json())  // ✅ Correction 3 : réponse JSON
                 .catch(error => console.error("Backend logging error:", error));
             }
 
