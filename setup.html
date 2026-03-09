@@ -686,6 +686,23 @@
                 "Noté."
             ];
 
+            // ---------- FONCTIONS DE DÉLAI HUMANISÉ ----------
+            function getHumanDelay(text = "", base = 900, perChar = 22, min = 1100, max = 2800) {
+                const safeText = String(text || "").replace(/\s+/g, " ").trim();
+                const computed = base + (safeText.length * perChar);
+                return Math.max(min, Math.min(max, computed));
+            }
+
+            function showBotMessageWithDelay(text, callback = null, withAvatar = true, customDelay = null) {
+                const delay = customDelay !== null ? customDelay : getHumanDelay(text);
+                showTypingIndicator();
+                setTimeout(() => {
+                    removeTypingIndicator();
+                    appendBotMessage(text, withAvatar);
+                    if (typeof callback === "function") callback();
+                }, delay);
+            }
+
             // ---------- Sauvegarde ----------
             function saveProgress() {
                 const data = { step, answers, activityAnalyzed, firstQuestionDone };
@@ -789,34 +806,102 @@
                 }
             }
 
+            // ---------- Fonctions d'enchaînement après réponse ----------
+            function proceedToNextAfterMessages() {
+                setTimeout(() => {
+                    if (step < questions.length) {
+                        askNextQuestion();
+                    } else {
+                        showSummaryThenFinalize();
+                    }
+                    busy = false;
+                    sendButton.disabled = false;
+                    userInput.focus();
+                    userInput.scrollIntoView({ behavior: "smooth", block: "center" });
+                    saveProgress();
+                }, 800);
+            }
+
+            function showPostAnswerMessages(userMsg, key) {
+                let messagesToShow = [];
+                if (key === "commerce") {
+                    messagesToShow.push(`Parfait 👍 ${userMsg}.`);
+                }
+                if (key === "ville") {
+                    messagesToShow.push(`Très bien pour ${userMsg}.`);
+                }
+                if (firstQuestionDone && step === 1) {
+                    messagesToShow.push(`Parfait 👍 Plus que ${questions.length - step} questions.`);
+                }
+                if (step === 3 && key !== "activite") {
+                    const remaining = questions.length - step;
+                    messagesToShow.push(`Super, plus que ${remaining} questions.`);
+                }
+                if (step === 6 && key !== "activite") {
+                    const randomConfirm = confirmations[Math.floor(Math.random() * confirmations.length)];
+                    messagesToShow.push(randomConfirm);
+                }
+
+                function showNext(index) {
+                    if (index < messagesToShow.length) {
+                        showBotMessageWithDelay(messagesToShow[index], () => showNext(index + 1));
+                    } else {
+                        proceedToNextAfterMessages();
+                    }
+                }
+
+                if (messagesToShow.length > 0) {
+                    showNext(0);
+                } else {
+                    proceedToNextAfterMessages();
+                }
+            }
+
+            function processAnswerContinuation(userMsg, key) {
+                if (key === "activite" && !activityAnalyzed) {
+                    activityAnalyzed = true;
+                    showBotMessageWithDelay("Parfait 👍", () => {
+                        if (firstQuestionDone && step === 2) {
+                            const remaining = questions.length - step;
+                            showBotMessageWithDelay(`Plus que ${remaining} questions.`, () => {
+                                proceedToNextAfterMessages();
+                            });
+                        } else {
+                            proceedToNextAfterMessages();
+                        }
+                    });
+                } else {
+                    showPostAnswerMessages(userMsg, key);
+                }
+            }
+
             // ---------- Pose de la question suivante ----------
             function askNextQuestion() {
                 if (step < questions.length) {
                     const q = questions[step];
-                    // Transitions conversationnelles avant certaines questions
-                    if (step === 1 || step === 4) {
-                        const transitions = ["Très bien 👍", "Parfait.", "Continuons.", "Merci."];
-                        const t = transitions[Math.floor(Math.random() * transitions.length)];
-                        appendBotMessage(t);
-                    }
-                    if (q.key === "email") {
-                        // Séquence spéciale pour l'email : message de rassurance puis question
-                        const typing = showTypingIndicator();
-                        setTimeout(() => {
-                            removeTypingIndicator();
-                            appendBotMessage("Nous utilisons votre email uniquement pour vous envoyer l’activation de votre assistant IA.");
-                            const typing2 = showTypingIndicator();
-                            setTimeout(() => {
-                                removeTypingIndicator();
-                                appendBotMessage(q.text);
+                    const transitions = ["Très bien 👍", "Parfait.", "Continuons.", "Merci."];
+                    
+                    const showQuestion = () => {
+                        if (q.key === "email") {
+                            showBotMessageWithDelay("Nous utilisons votre email uniquement pour vous envoyer l’activation de votre assistant IA.", () => {
+                                showBotMessageWithDelay(q.text, () => {
+                                    updateProgress();
+                                    setInputForQuestion(q);
+                                });
+                            });
+                        } else {
+                            showBotMessageWithDelay(q.text, () => {
                                 updateProgress();
                                 setInputForQuestion(q);
-                            }, 900);
-                        }, 600);
+                            });
+                        }
+                    };
+
+                    if (step === 1 || step === 4) {
+                        const t = transitions[Math.floor(Math.random() * transitions.length)];
+                        showBotMessageWithDelay(t, showQuestion);
                     } else {
-                        appendBotMessage(q.text);
-                        updateProgress();
-                        setInputForQuestion(q);
+                        showQuestion();
                     }
                 } else {
                     showSummaryThenFinalize();
@@ -833,7 +918,6 @@
                     email: answers.email,
                     timestamp: Date.now()
                 };
-                // Utilisation de la fonction centralisée de logging
                 sendToBackend("Partial lead: " + JSON.stringify(partialData));
             }
 
@@ -848,19 +932,22 @@
                 if (step < questions.length) {
                     const currentQ = questions[step];
                     if (currentQ.key === "questions" && userMsg.length > 500) {
-                        appendBotMessage("Pouvez-vous résumer en quelques phrases ? (500 caractères maximum)");
-                        userInput.value = '';
-                        userInput.focus();
+                        busy = true;
+                        sendButton.disabled = true;
+                        showBotMessageWithDelay("Pouvez-vous résumer en quelques phrases ? (500 caractères maximum)", () => {
+                            busy = false;
+                            sendButton.disabled = false;
+                            userInput.value = '';
+                            userInput.focus();
+                        });
                         return;
                     }
                 }
 
                 appendUserMessage(userMsg);
-                // Logger chaque réponse utilisateur
                 sendToBackend(userMsg);
-
                 userInput.value = '';
-                userInput.blur(); // Ferme le clavier mobile
+                userInput.blur();
                 busy = true;
                 sendButton.disabled = true;
 
@@ -871,20 +958,26 @@
 
                     // Validations existantes
                     if (isRequired && userMsg.length < 3) {
-                        appendBotMessage("Pouvez-vous préciser un peu plus ? (minimum 3 caractères)");
-                        busy = false;
-                        sendButton.disabled = false;
-                        userInput.focus();
+                        busy = true;
+                        sendButton.disabled = true;
+                        showBotMessageWithDelay("Pouvez-vous préciser un peu plus ? (minimum 3 caractères)", () => {
+                            busy = false;
+                            sendButton.disabled = false;
+                            userInput.focus();
+                        });
                         return;
                     }
 
                     if (key === "email") {
                         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                         if (!emailRegex.test(userMsg)) {
-                            appendBotMessage("⚠️ Cet email ne semble pas valide. Pouvez-vous vérifier ?");
-                            busy = false;
-                            sendButton.disabled = false;
-                            userInput.focus();
+                            busy = true;
+                            sendButton.disabled = true;
+                            showBotMessageWithDelay("⚠️ Cet email ne semble pas valide. Pouvez-vous vérifier ?", () => {
+                                busy = false;
+                                sendButton.disabled = false;
+                                userInput.focus();
+                            });
                             return;
                         }
                     }
@@ -892,10 +985,13 @@
                     if (key === "telephone" && userMsg !== "") {
                         const phoneRegex = /^[0-9+ ]{8,15}$/;
                         if (!phoneRegex.test(userMsg)) {
-                            appendBotMessage("⚠️ Ce numéro ne semble pas correct. Il doit comporter entre 8 et 15 chiffres (espaces et + autorisés).");
-                            busy = false;
-                            sendButton.disabled = false;
-                            userInput.focus();
+                            busy = true;
+                            sendButton.disabled = true;
+                            showBotMessageWithDelay("⚠️ Ce numéro ne semble pas correct. Il doit comporter entre 8 et 15 chiffres (espaces et + autorisés).", () => {
+                                busy = false;
+                                sendButton.disabled = false;
+                                userInput.focus();
+                            });
                             return;
                         }
                     }
@@ -914,84 +1010,25 @@
 
                     // Micro-feedbacks spécifiques
                     if (key === "email") {
-                        appendBotMessage("Parfait 👍 Nous utiliserons cet email pour vous envoyer l'activation de votre assistant.");
-                        sendPartialLead();
+                        showBotMessageWithDelay("Parfait 👍 Nous utiliserons cet email pour vous envoyer l'activation de votre assistant.", () => {
+                            sendPartialLead();
+                            step++;
+                            saveProgress();
+                            processAnswerContinuation(userMsg, key);
+                        });
+                        return;
                     }
 
                     if (!firstQuestionDone && step === 0) {
                         firstQuestionDone = true;
                     }
 
-                    saveProgress();
+                    // Sauvegarde et incrémentation pour les autres cas
                     step++;
+                    saveProgress();
 
-                    // Analyse de l'activité (message très court)
-                    if (key === "activite" && !activityAnalyzed) {
-                        activityAnalyzed = true;
-                        const typing = showTypingIndicator();
-                        setTimeout(() => {
-                            removeTypingIndicator();
-                            appendBotMessage("Parfait 👍");
-                            if (firstQuestionDone && step === 2) {
-                                const remaining = questions.length - step;
-                                appendBotMessage(`Plus que ${remaining} questions.`);
-                            }
-                            setTimeout(() => {
-                                if (step < questions.length) {
-                                    askNextQuestion();
-                                } else {
-                                    showSummaryThenFinalize();
-                                }
-                                busy = false;
-                                sendButton.disabled = false;
-                                userInput.focus();
-                                userInput.scrollIntoView({ behavior: "smooth", block: "center" });
-                                saveProgress();
-                            }, 800);
-                        }, 600);
-                        return;
-                    }
-
-                    // Pour les autres questions
-                    const typing = showTypingIndicator();
-                    setTimeout(() => {
-                        removeTypingIndicator();
-
-                        // Miroir de réponse pour commerce et ville
-                        if (key === "commerce") {
-                            appendBotMessage(`Parfait 👍 ${userMsg}.`);
-                        }
-                        if (key === "ville") {
-                            appendBotMessage(`Très bien pour ${userMsg}.`);
-                        }
-
-                        // Messages de progression
-                        if (firstQuestionDone && step === 1) {
-                            appendBotMessage(`Parfait 👍 Plus que ${questions.length - step} questions.`);
-                        }
-                        if (step === 3 && key !== "activite") {
-                            const remaining = questions.length - step;
-                            appendBotMessage(`Super, plus que ${remaining} questions.`);
-                        }
-                        // Confirmation aléatoire pour la 6ème question (step 6), avec protection contre doublon
-                        if (step === 6 && key !== "activite") {
-                            const randomConfirm = confirmations[Math.floor(Math.random() * confirmations.length)];
-                            appendBotMessage(randomConfirm);
-                        }
-
-                        setTimeout(() => {
-                            if (step < questions.length) {
-                                askNextQuestion();
-                            } else {
-                                showSummaryThenFinalize();
-                            }
-                            busy = false;
-                            sendButton.disabled = false;
-                            userInput.focus();
-                            userInput.scrollIntoView({ behavior: "smooth", block: "center" });
-                            saveProgress();
-                        }, 800);
-                    }, 800);
+                    // Traitement de la suite (activite ou général)
+                    processAnswerContinuation(userMsg, key);
                 } else {
                     busy = false;
                     sendButton.disabled = false;
@@ -1000,7 +1037,7 @@
 
             // ---------- Résumé avant finalisation ----------
             function showSummaryThenFinalize() {
-                const qText = answers.questions || ""; // Protection si undefined
+                const qText = answers.questions || "";
                 const truncatedQuestions = qText.length > 200 ? qText.substring(0, 200) + "…" : qText;
                 const tel = answers.telephone || "Non renseigné";
                 const site = answers.site || "Non renseigné";
@@ -1008,11 +1045,11 @@
 
                 const summary = `Parfait 👍\n\nVoici les informations que nous avons enregistrées :\n\nCommerce : ${answers.commerce}\nVille : ${answers.ville}\nActivité : ${answers.activite}\nEmail : ${answers.email}\nTéléphone : ${tel}\nSite web : ${site}\nLien réservation : ${reservation}\nHoraires : ${answers.horaires}\nQuestions fréquentes : ${truncatedQuestions}\n\nNous utilisons ces informations pour préparer votre assistant IA.`;
 
-                appendBotMessage(summary);
-
-                setTimeout(() => {
-                    finalizeConfiguration();
-                }, 3000);
+                showBotMessageWithDelay(summary, () => {
+                    setTimeout(() => {
+                        finalizeConfiguration();
+                    }, 4000); // Pause augmentée pour laisser respirer
+                });
             }
 
             // ---------- Finalisation : envoi complet, simulation, redirection ----------
@@ -1041,16 +1078,26 @@
                 // Envoi du résumé final au backend
                 sendToBackend("CONFIGURATION COMPLETE : " + JSON.stringify(formData));
 
-                // Messages alignés avec le processus réel
-                setTimeout(() => appendBotMessage("⚙️ Enregistrement de votre demande"), 2000);
-                setTimeout(() => appendBotMessage("⚙️ Préparation de la configuration de votre assistant"), 5000);
-                setTimeout(() => appendBotMessage("⚙️ Transmission des informations à notre équipe"), 8000);
-                setTimeout(() => appendBotMessage("Votre demande a bien été enregistrée.\n\nNous préparons maintenant la configuration de votre assistant IA.\n\nVotre assistant sera prêt sous 24h."), 12000);
-                setTimeout(() => appendBotMessage("Vous allez être redirigé vers la page de confirmation."), 14000);
+                // Messages alignés avec le processus réel, délais augmentés
+                setTimeout(() => {
+                    showBotMessageWithDelay("⚙️ Enregistrement de votre demande");
+                }, 2500);
+                setTimeout(() => {
+                    showBotMessageWithDelay("⚙️ Préparation de la configuration de votre assistant");
+                }, 5200);
+                setTimeout(() => {
+                    showBotMessageWithDelay("⚙️ Transmission des informations à notre équipe");
+                }, 8600);
+                setTimeout(() => {
+                    showBotMessageWithDelay("Votre demande a bien été enregistrée.\n\nNous préparons maintenant la configuration de votre assistant IA.\n\nVotre assistant sera prêt sous 24h.");
+                }, 12500);
+                setTimeout(() => {
+                    showBotMessageWithDelay("Vous allez être redirigé vers la page de confirmation.");
+                }, 14800);
                 setTimeout(() => {
                     clearProgress();
                     window.location.href = "/merci.html";
-                }, 15000);
+                }, 16200);
             }
 
             // ---------- Initialisation (reprise ou nouveau) ----------
@@ -1058,46 +1105,39 @@
                 const hasSaved = loadProgress();
                 if (hasSaved && step > 0) {
                     if (step >= questions.length) {
-                        appendBotMessage("Nous reprenons la configuration là où vous vous étiez arrêté.");
-                        setTimeout(() => showSummaryThenFinalize(), 1200);
-                    } else {
-                        appendBotMessage("Nous reprenons la configuration là où vous vous étiez arrêté.");
-                        updateProgress();
-                        setTimeout(() => {
-                            const q = questions[step];
-                            appendBotMessage(q.text);
-                            setInputForQuestion(q);
-                            busy = false;
-                            sendButton.disabled = false;
-                            userInput.focus();
-                            userInput.scrollIntoView({ behavior: "smooth", block: "center" });
-                        }, 1200);
-                    }
-                } else {
-                    // Nouvelle conversation avec séquence naturelle
-                    appendBotMessage("Bienvenue dans la configuration de votre assistant IA.\n\nNous allons vous poser 9 questions rapides pour comprendre votre commerce.\n\nNous nous occupons ensuite de toute la configuration de votre assistant IA.\n\nCela prend environ 60 secondes.");
-
-                    setTimeout(() => {
-                        const typing1 = showTypingIndicator();
-                        setTimeout(() => {
-                            removeTypingIndicator();
-                            appendBotMessage("Quelques mots suffisent pour chaque réponse.");
-                            const typing2 = showTypingIndicator();
+                        showBotMessageWithDelay("Nous reprenons la configuration là où vous vous étiez arrêté.", () => {
                             setTimeout(() => {
-                                removeTypingIndicator();
-                                appendBotMessage("Parfait, commençons.");
-                                const typing3 = showTypingIndicator();
-                                setTimeout(() => {
-                                    removeTypingIndicator();
-                                    askNextQuestion();
+                                showSummaryThenFinalize();
+                            }, 1200);
+                        });
+                    } else {
+                        showBotMessageWithDelay("Nous reprenons la configuration là où vous vous étiez arrêté.", () => {
+                            updateProgress();
+                            setTimeout(() => {
+                                const q = questions[step];
+                                showBotMessageWithDelay(q.text, () => {
+                                    setInputForQuestion(q);
                                     busy = false;
                                     sendButton.disabled = false;
                                     userInput.focus();
                                     userInput.scrollIntoView({ behavior: "smooth", block: "center" });
-                                }, 900);
+                                });
                             }, 1200);
-                        }, 1200);
-                    }, 800);
+                        });
+                    }
+                } else {
+                    // Nouvelle conversation avec séquence naturelle
+                    showBotMessageWithDelay("Bienvenue dans la configuration de votre assistant IA.\n\nNous allons vous poser 9 questions rapides pour comprendre votre commerce.\n\nNous nous occupons ensuite de toute la configuration de votre assistant IA.\n\nCela prend environ 60 secondes.", () => {
+                        showBotMessageWithDelay("Quelques mots suffisent pour chaque réponse.", () => {
+                            showBotMessageWithDelay("Parfait, commençons.", () => {
+                                askNextQuestion();
+                                busy = false;
+                                sendButton.disabled = false;
+                                userInput.focus();
+                                userInput.scrollIntoView({ behavior: "smooth", block: "center" });
+                            });
+                        });
+                    });
                 }
             }
 
