@@ -686,15 +686,41 @@
                 "Noté."
             ];
 
-            // ---------- FONCTIONS DE DÉLAI HUMANISÉ ----------
-            function getHumanDelay(text = "", base = 900, perChar = 22, min = 1100, max = 2800) {
+            // ---------- FONCTIONS DE DÉLAI HUMANISÉ (avec contexte) ----------
+            function getHumanDelay(text = "", context = "normal") {
                 const safeText = String(text || "").replace(/\s+/g, " ").trim();
+
+                let base = 900;
+                let perChar = 22;
+                let min = 1100;
+                let max = 2800;
+
+                // Variation selon le type de message
+                if (context === "analysis") {
+                    base = 1400;
+                    perChar = 28;
+                    max = 3600;
+                }
+
+                if (context === "summary") {
+                    base = 1600;
+                    perChar = 32;
+                    max = 4200;
+                }
+
+                if (context === "transition") {
+                    base = 700;
+                    perChar = 15;
+                    max = 2000;
+                }
+
                 const computed = base + (safeText.length * perChar);
+
                 return Math.max(min, Math.min(max, computed));
             }
 
-            function showBotMessageWithDelay(text, callback = null, withAvatar = true, customDelay = null) {
-                const delay = customDelay !== null ? customDelay : getHumanDelay(text);
+            function showBotMessageWithDelay(text, callback = null, withAvatar = true, context = "normal") {
+                const delay = getHumanDelay(text, context);
                 showTypingIndicator();
                 setTimeout(() => {
                     removeTypingIndicator();
@@ -844,7 +870,8 @@
 
                 function showNext(index) {
                     if (index < messagesToShow.length) {
-                        showBotMessageWithDelay(messagesToShow[index], () => showNext(index + 1));
+                        // Ces messages sont des confirmations rapides → contexte "transition"
+                        showBotMessageWithDelay(messagesToShow[index], () => showNext(index + 1), true, "transition");
                     } else {
                         proceedToNextAfterMessages();
                     }
@@ -860,16 +887,18 @@
             function processAnswerContinuation(userMsg, key) {
                 if (key === "activite" && !activityAnalyzed) {
                     activityAnalyzed = true;
+                    // Le message "Parfait 👍" est une transition rapide
                     showBotMessageWithDelay("Parfait 👍", () => {
                         if (firstQuestionDone && step === 2) {
                             const remaining = questions.length - step;
+                            // "Plus que X questions" peut être considéré comme transition aussi
                             showBotMessageWithDelay(`Plus que ${remaining} questions.`, () => {
                                 proceedToNextAfterMessages();
-                            });
+                            }, true, "transition");
                         } else {
                             proceedToNextAfterMessages();
                         }
-                    });
+                    }, true, "transition");
                 } else {
                     showPostAnswerMessages(userMsg, key);
                 }
@@ -883,23 +912,26 @@
                     
                     const showQuestion = () => {
                         if (q.key === "email") {
+                            // Message de rassurance (normal) puis question (analyse)
                             showBotMessageWithDelay("Nous utilisons votre email uniquement pour vous envoyer l’activation de votre assistant IA.", () => {
                                 showBotMessageWithDelay(q.text, () => {
                                     updateProgress();
                                     setInputForQuestion(q);
-                                });
-                            });
+                                }, true, "analysis");
+                            }, true, "normal"); // le message de rassurance peut rester normal
                         } else {
+                            // Question standard → contexte "analysis" pour simuler réflexion
                             showBotMessageWithDelay(q.text, () => {
                                 updateProgress();
                                 setInputForQuestion(q);
-                            });
+                            }, true, "analysis");
                         }
                     };
 
                     if (step === 1 || step === 4) {
                         const t = transitions[Math.floor(Math.random() * transitions.length)];
-                        showBotMessageWithDelay(t, showQuestion);
+                        // Transition rapide avant la question
+                        showBotMessageWithDelay(t, showQuestion, true, "transition");
                     } else {
                         showQuestion();
                     }
@@ -934,12 +966,13 @@
                     if (currentQ.key === "questions" && userMsg.length > 500) {
                         busy = true;
                         sendButton.disabled = true;
+                        // Message d'erreur → normal (pas d'analyse)
                         showBotMessageWithDelay("Pouvez-vous résumer en quelques phrases ? (500 caractères maximum)", () => {
                             busy = false;
                             sendButton.disabled = false;
                             userInput.value = '';
                             userInput.focus();
-                        });
+                        }, true, "normal");
                         return;
                     }
                 }
@@ -964,7 +997,7 @@
                             busy = false;
                             sendButton.disabled = false;
                             userInput.focus();
-                        });
+                        }, true, "normal");
                         return;
                     }
 
@@ -977,7 +1010,7 @@
                                 busy = false;
                                 sendButton.disabled = false;
                                 userInput.focus();
-                            });
+                            }, true, "normal");
                             return;
                         }
                     }
@@ -991,7 +1024,7 @@
                                 busy = false;
                                 sendButton.disabled = false;
                                 userInput.focus();
-                            });
+                            }, true, "normal");
                             return;
                         }
                     }
@@ -1010,12 +1043,13 @@
 
                     // Micro-feedbacks spécifiques
                     if (key === "email") {
+                        // Confirmation rapide → transition
                         showBotMessageWithDelay("Parfait 👍 Nous utiliserons cet email pour vous envoyer l'activation de votre assistant.", () => {
                             sendPartialLead();
                             step++;
                             saveProgress();
                             processAnswerContinuation(userMsg, key);
-                        });
+                        }, true, "transition");
                         return;
                     }
 
@@ -1045,11 +1079,12 @@
 
                 const summary = `Parfait 👍\n\nVoici les informations que nous avons enregistrées :\n\nCommerce : ${answers.commerce}\nVille : ${answers.ville}\nActivité : ${answers.activite}\nEmail : ${answers.email}\nTéléphone : ${tel}\nSite web : ${site}\nLien réservation : ${reservation}\nHoraires : ${answers.horaires}\nQuestions fréquentes : ${truncatedQuestions}\n\nNous utilisons ces informations pour préparer votre assistant IA.`;
 
+                // Résumé → contexte "summary" pour un délai plus long (compilation des infos)
                 showBotMessageWithDelay(summary, () => {
                     setTimeout(() => {
                         finalizeConfiguration();
                     }, 4000); // Pause augmentée pour laisser respirer
-                });
+                }, true, "summary");
             }
 
             // ---------- Finalisation : envoi complet, simulation, redirection ----------
@@ -1079,6 +1114,7 @@
                 sendToBackend("CONFIGURATION COMPLETE : " + JSON.stringify(formData));
 
                 // Messages alignés avec le processus réel, délais augmentés
+                // Ces messages sont des étapes de simulation → on garde "normal" (pas d'analyse)
                 setTimeout(() => {
                     showBotMessageWithDelay("⚙️ Enregistrement de votre demande");
                 }, 2500);
@@ -1109,24 +1145,26 @@
                             setTimeout(() => {
                                 showSummaryThenFinalize();
                             }, 1200);
-                        });
+                        }, true, "normal"); // message de reprise → normal
                     } else {
                         showBotMessageWithDelay("Nous reprenons la configuration là où vous vous étiez arrêté.", () => {
                             updateProgress();
                             setTimeout(() => {
                                 const q = questions[step];
+                                // La question reprise doit être en "analysis"
                                 showBotMessageWithDelay(q.text, () => {
                                     setInputForQuestion(q);
                                     busy = false;
                                     sendButton.disabled = false;
                                     userInput.focus();
                                     userInput.scrollIntoView({ behavior: "smooth", block: "center" });
-                                });
+                                }, true, "analysis");
                             }, 1200);
-                        });
+                        }, true, "normal");
                     }
                 } else {
                     // Nouvelle conversation avec séquence naturelle
+                    // Intro : messages normaux (pas d'analyse)
                     showBotMessageWithDelay("Bienvenue dans la configuration de votre assistant IA.\n\nNous allons vous poser 9 questions rapides pour comprendre votre commerce.\n\nNous nous occupons ensuite de toute la configuration de votre assistant IA.\n\nCela prend environ 60 secondes.", () => {
                         showBotMessageWithDelay("Quelques mots suffisent pour chaque réponse.", () => {
                             showBotMessageWithDelay("Parfait, commençons.", () => {
@@ -1135,9 +1173,9 @@
                                 sendButton.disabled = false;
                                 userInput.focus();
                                 userInput.scrollIntoView({ behavior: "smooth", block: "center" });
-                            });
-                        });
-                    });
+                            }, true, "transition"); // "Parfait, commençons" est une transition
+                        }, true, "normal");
+                    }, true, "normal");
                 }
             }
 
