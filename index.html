@@ -17,16 +17,20 @@
     <meta property="og:description" content="Un assistant IA qui répond aux questions de vos clients 24h/24 (horaires, prix, réservations). 19€/mois sans engagement.">
     <meta property="og:url" content="https://commercants.devchatbotia.app/">
     <meta property="og:type" content="website">
-    <!-- Nouvel og:image (remplacé) -->
-    <meta property="og:image" content="https://static.wixstatic.com/media/3c8e1e_71d4fdd68a914813b1728aa8ad2e1703~mv2.webp">
+    <!-- Nouvel og:image (minimaliste) -->
+    <meta property="og:image" content="https://commercants.devchatbotia.app/preview.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://commercants.devchatbotia.app/preview.jpg">
     <!-- Ajout og:site_name pour le SEO -->
     <meta property="og:site_name" content="DevChatbotIA">
     <!-- Author -->
     <meta name="author" content="DevChatbotIA®">
     <title>Assistant IA pour commerçants – DevChatbotIA®</title>
 
-    <!-- ✅ favicon (juste après le title) -->
-    <link rel="icon" href="https://assistant.devchatbotia.app/favicon.ico" type="image/x-icon">
+    <!-- ✅ favicon vide (effet pub) -->
+    <link rel="icon" href="data:,">
 
     <!-- ✅ Script Schema.org (juste après le title) -->
     <script type="application/ld+json">
@@ -40,6 +44,26 @@
         "@type": "ContactPoint",
         "email": "direction@devchatbotia.com",
         "contactType": "customer support"
+      }
+    }
+    </script>
+
+    <!-- ✅ Schema Product ajouté -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Assistant IA pour commerçants",
+      "description": "Assistant IA qui répond aux questions clients et facilite les réservations pour les commerces.",
+      "brand": {
+        "@type": "Brand",
+        "name": "DevChatbotIA"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "19",
+        "priceCurrency": "EUR",
+        "availability": "https://schema.org/InStock"
       }
     }
     </script>
