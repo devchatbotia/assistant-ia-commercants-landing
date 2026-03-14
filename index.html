@@ -1100,11 +1100,39 @@
                 margin-top: 10px !important;
             }
         }
+
+        /* ===== AJOUT POUR L'EFFET DYNAMIQUE (indicateur de frappe) ===== */
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 12px 20px;
+            background: var(--bg-soft);
+            border-radius: 24px 24px 24px 8px;
+            border: 1px solid var(--border-light);
+            width: fit-content;
+        }
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            background: var(--text-secondary);
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+        .typing-indicator span:nth-child(1) { animation-delay: 0s; }
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+            30% { transform: translateY(-6px); opacity: 1; }
+        }
+        .hidden {
+            display: none !important;
+        }
     </style>
 </head>
 <body class="no-js">
-    <!-- H1 invisible pour le SEO -->
-    <h1 style="display:none;">Assistant IA pour commerçants – répondre automatiquement aux clients 24h/24</h1>
+    <!-- H1 caché supprimé selon recommandation SEO -->
 
     <!-- NAVBAR (sans logo) -->
     <div class="navbar-wrapper">
@@ -1157,32 +1185,40 @@
                     </div>
                 </div>
                 <div class="hero-visual">
+                    <!-- La conversation statique est conservée pour le fallback no-js, elle sera remplacée par l'animation JS -->
                     <div class="message-thread">
+                        <!-- Messages mis à jour version premium -->
                         <div class="msg in">
                             <div class="msg-avatar">📱</div>
-                            <div class="msg-bubble">Bonjour, vous êtes ouverts aujourd'hui ?</div>
+                            <div class="msg-bubble">Bonjour, je souhaiterais prendre rendez-vous pour un devis.</div>
                         </div>
                         <div class="msg out">
                             <div class="msg-avatar">⚡</div>
                             <div class="msg-bubble">
-                                Bonjour ! Oui nous sommes ouverts jusqu'à 19h. Souhaitez-vous réserver ?
+                                Bonjour 👋 Avec plaisir. Il reste des créneaux vendredi en fin de journée. Souhaitez-vous 17h30 ou 18h15 ?
                                 <small>Assistant IA · 24/7</small>
                             </div>
                         </div>
                         <div class="msg in">
                             <div class="msg-avatar">📱</div>
-                            <div class="msg-bubble">Parfait, je peux passer vers 18h ?</div>
+                            <div class="msg-bubble">18h15.</div>
                         </div>
                         <div class="msg out">
                             <div class="msg-avatar">⚡</div>
-                            <div class="msg-bubble">
-                                Je vous envoie le lien pour réserver votre créneau.
-                            </div>
+                            <div class="msg-bubble">Parfait ✔️ Pour confirmer, pouvez-vous indiquer votre nom et un numéro de contact ?</div>
+                        </div>
+                        <div class="msg in">
+                            <div class="msg-avatar">📱</div>
+                            <div class="msg-bubble">M. Dubois — 06 ••• •• •• ••</div>
+                        </div>
+                        <div class="msg out">
+                            <div class="msg-avatar">⚡</div>
+                            <div class="msg-bubble">Merci 👍 Rendez-vous confirmé. Un conseiller vous contactera si nécessaire.</div>
                         </div>
                     </div>
                     <div class="calendar-snip">
-                        <span><i class="far fa-calendar-check"></i> Créneau 18h disponible</span>
-                        <span>➡️ Lien de réservation envoyé <i class="fas fa-check-circle" style="color: var(--success);"></i></span>
+                        <span><i class="far fa-calendar-check"></i> Vendredi 18h15 réservé</span>
+                        <span>➡️ Coordonnées collectées : M. Dubois — 06 ••• •• •• •• <i class="fas fa-check-circle" style="color: var(--success);"></i></span>
                     </div>
                 </div>
             </div>
@@ -1554,10 +1590,111 @@
     </div>
 
     <script>
-        window.addEventListener('load', () => {
-            document.body.classList.add('loaded');
-            document.body.classList.remove('no-js');
-        });
+        // Script d'animation de la conversation HERO
+        (function() {
+            // Attendre que le DOM soit prêt
+            document.addEventListener('DOMContentLoaded', function() {
+                // Ajouter la classe loaded pour les animations d'entrée
+                document.body.classList.add('loaded');
+                document.body.classList.remove('no-js');
+
+                // Éléments de la conversation
+                const messageThread = document.querySelector('.hero-visual .message-thread');
+                const calendarSnip = document.querySelector('.hero-visual .calendar-snip');
+                if (!messageThread || !calendarSnip) return;
+
+                // Cacher le calendrier au début
+                calendarSnip.classList.add('hidden');
+
+                // Vider le contenu statique
+                messageThread.innerHTML = '';
+
+                // Définition des messages (adaptés à la version commerçants)
+                const messages = [
+                    { role: 'in', avatar: '📱', text: 'Bonjour, je souhaiterais prendre rendez-vous pour un devis.' },
+                    { role: 'out', avatar: '⚡', text: 'Bonjour 👋 Avec plaisir. Il reste des créneaux vendredi en fin de journée. Souhaitez-vous 17h30 ou 18h15 ?<br><small>Assistant IA · 24/7</small>' },
+                    { role: 'in', avatar: '📱', text: '18h15.' },
+                    { role: 'out', avatar: '⚡', text: 'Parfait ✔️ Pour confirmer, pouvez-vous indiquer votre nom et un numéro de contact ?' },
+                    { role: 'in', avatar: '📱', text: 'M. Dubois — 06 ••• •• •• ••' },
+                    { role: 'out', avatar: '⚡', text: 'Merci 👍 Rendez-vous confirmé. Un conseiller vous contactera si nécessaire.' }
+                ];
+
+                // Paramètres de temporisation
+                const typingDuration = 2600;  // 2,6 secondes d'indicateur de frappe
+                const messageDuration = 2000;  // 2 secondes entre les messages
+                let delay = 1000; // délai initial avant le premier message (1 seconde)
+
+                messages.forEach((msg, index) => {
+                    if (msg.role === 'out') {
+                        // 1️⃣ Indicateur de frappe
+                        const typingTimeout = setTimeout(() => {
+                            const typingDiv = document.createElement('div');
+                            typingDiv.className = 'msg out';
+                            typingDiv.id = `typing-${index}`;
+
+                            const avatar = document.createElement('div');
+                            avatar.className = 'msg-avatar';
+                            avatar.textContent = msg.avatar;
+
+                            const indicator = document.createElement('div');
+                            indicator.className = 'typing-indicator';
+                            indicator.innerHTML = '<span></span><span></span><span></span>';
+
+                            typingDiv.appendChild(avatar);
+                            typingDiv.appendChild(indicator);
+                            messageThread.appendChild(typingDiv);
+                        }, delay);
+                        delay += typingDuration;
+
+                        // 2️⃣ Vrai message
+                        const msgTimeout = setTimeout(() => {
+                            const typingDiv = document.getElementById(`typing-${index}`);
+                            if (typingDiv) typingDiv.remove();
+
+                            const msgDiv = document.createElement('div');
+                            msgDiv.className = `msg ${msg.role}`;
+
+                            const avatar = document.createElement('div');
+                            avatar.className = 'msg-avatar';
+                            avatar.textContent = msg.avatar;
+
+                            const bubble = document.createElement('div');
+                            bubble.className = 'msg-bubble';
+                            bubble.innerHTML = msg.text; // contient du HTML (br, small)
+
+                            msgDiv.appendChild(avatar);
+                            msgDiv.appendChild(bubble);
+                            messageThread.appendChild(msgDiv);
+                        }, delay);
+                        delay += messageDuration;
+                    } else {
+                        // Message entrant
+                        const msgTimeout = setTimeout(() => {
+                            const msgDiv = document.createElement('div');
+                            msgDiv.className = `msg ${msg.role}`;
+
+                            const avatar = document.createElement('div');
+                            avatar.className = 'msg-avatar';
+                            avatar.textContent = msg.avatar;
+
+                            const bubble = document.createElement('div');
+                            bubble.className = 'msg-bubble';
+                            bubble.textContent = msg.text; // pas de HTML dans les messages entrants
+
+                            msgDiv.appendChild(avatar);
+                            msgDiv.appendChild(bubble);
+                            messageThread.appendChild(msgDiv);
+                        }, delay);
+                        delay += messageDuration;
+                    }
+                });
+
+                // Après le dernier message, attendre un peu puis afficher le calendrier
+                setTimeout(() => {
+                    calendarSnip.classList.remove('hidden');
+                }, delay + 1000); // 1 seconde supplémentaire pour que l'utilisateur lise le dernier message
+            });
+        })();
     </script>
 </body>
 </html>
