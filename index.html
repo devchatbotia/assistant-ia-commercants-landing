@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#1a2a27">
     <meta name="description" content="Assistant IA pour commerces et artisans : répond automatiquement aux clients (WhatsApp, horaires, prix, réservations). Activation rapide, 19€/mois sans engagement.">
-    <meta name="keywords" content="assistant IA commerçant, chatbot commerçant, IA pour commerce, répondre clients automatiquement, assistant IA boutique">
     <link rel="canonical" href="https://commercants.devchatbotia.app/">
     <meta name="robots" content="index, follow">
     <meta property="og:title" content="Assistant IA pour commerçants – DevChatbotIA®">
@@ -19,6 +18,7 @@
     <meta name="twitter:image" content="https://commercants.devchatbotia.app/preview.jpg">
     <meta property="og:site_name" content="DevChatbotIA">
     <meta name="author" content="DevChatbotIA®">
+    <link rel="publisher" href="https://devchatbotia.com"> <!-- micro-optimisation bonus -->
     <title>Assistant IA commerçant — réponses automatiques clients 24/7 | DevChatbotIA®</title>
 
     <link rel="icon" href="data:,">
@@ -58,10 +58,11 @@
     }
     </script>
 
+    <!-- Google Fonts : preload + onload uniquement, pas de doublon -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet"></noscript>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <style>
@@ -321,17 +322,79 @@
             color: var(--accent-primary);
         }
 
+        /* === CORRECTIONS LAYOUT HERO PREMIUM === */
         .hero {
             display: grid;
             grid-template-columns: 1.1fr 1fr;
             gap: 100px;
-            align-items: center;
+            align-items: start;
             padding: 10px 0 40px;
         }
 
-        .hero > div:first-child {
+        .hero-left {
+            align-self: start;
+        }
+
+        .chat-wrapper {
+            position: sticky;
+            top: 110px;
+            height: 620px;
+            display: flex;
+            align-items: flex-start;
+            border-radius: 24px;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .hero-visual {
+            height: 100%;
+            max-height: 620px;
+            overflow-y: auto;
+            border-radius: 20px;
+            background: var(--bg-soft);
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-main);
+            padding: 28px 32px 40px;
             position: relative;
-            z-index: 1;
+            width: 100%;
+        }
+
+        .hero-visual::-webkit-scrollbar {
+            width: 6px;
+        }
+        .hero-visual::-webkit-scrollbar-track {
+            background: var(--border-light);
+            border-radius: 10px;
+        }
+        .hero-visual::-webkit-scrollbar-thumb {
+            background: var(--accent-glow);
+            border-radius: 10px;
+        }
+
+        @media (max-width: 1024px) {
+            .hero {
+                grid-template-columns: 1fr;
+                gap: 50px;
+                text-align: center;
+            }
+            .lead {
+                max-width: 100%;
+                margin: 0 auto;
+            }
+            .micro-proof {
+                justify-content: center;
+            }
+            .chat-wrapper {
+                position: relative;
+                top: 0;
+                height: auto;
+                display: block;
+                box-shadow: none;
+            }
+            .hero-visual {
+                max-height: 520px;
+                height: auto;
+                margin-top: 20px;
+            }
         }
 
         .hero > div:first-child::before {
@@ -364,29 +427,13 @@
             filter: blur(4px);
         }
 
-        @media (max-width: 1024px) {
-            .hero { grid-template-columns: 1fr; gap: 50px; text-align: center; }
-            .lead { max-width: 100%; margin: 0 auto; }
-            .micro-proof { justify-content: center; }
-        }
-
-        .hero-visual {
-            position: relative;
-            background: var(--bg-soft);
-            border: 1px solid var(--border-light);
-            border-radius: var(--radius-main);
-            padding: 28px 32px 40px;
-            box-shadow: var(--shadow-main);
-            overflow: hidden;
-            min-height: 620px;
-        }
-
         .hero-visual::before {
             content: '';
             position: absolute;
             inset: 0;
             background: radial-gradient(circle at 20% 20%, rgba(184,158,111,0.08), transparent 60%);
             z-index: 0;
+            pointer-events: none;
         }
 
         .message-thread {
@@ -498,7 +545,6 @@
             filter: drop-shadow(0 2px 4px rgba(30,126,75,0.3));
         }
 
-        /* ===== BADGE PREMIUM (ULTIME) ===== */
         .cert-badge {
             display: flex;
             align-items: center;
@@ -548,7 +594,6 @@
             text-align: center;
         }
 
-        /* Le reste des styles (channel-icons, grid-steps, etc.) est identique à la version validée */
         .channel-icons {
             display: flex;
             justify-content: center;
@@ -1059,15 +1104,15 @@
     <section class="section">
         <div class="container">
             <div class="hero">
-                <div>
+                <div class="hero-left">
                     <div class="badge">
                         <i class="fas fa-robot"></i>
                         Assistant IA pour commerçants
                     </div>
                     <h1>Un assistant IA qui répond à vos clients<br><span style="color: var(--accent-primary); font-weight:700;">pendant que vous travaillez.</span><br><span class="accent-glow">19€/mois, sans engagement.</span></h1>
+                    <p style="font-size:1.2rem; font-weight:500; color: var(--accent-primary); margin-bottom:0.5rem;">⚡ Chaque demande sans réponse = un client qui part ailleurs.</p>
                     <p class="lead">Votre assistant IA répond aux questions de vos clients (horaires, prix, disponibilités) et peut envoyer votre lien de réservation. 24h/24.</p>
 
-                    <!-- BADGE PREMIUM (ULTIME) -->
                     <div class="cert-badge">
                         <img 
                             src="https://static.wixstatic.com/media/3c8e1e_3c45b0c7046e479f965c95b32a1dd6e1~mv2.png"
@@ -1099,15 +1144,17 @@
                         <span><i class="fas fa-check-circle"></i> Artisans, boutiques & commerces locaux</span>
                     </div>
                 </div>
-                <div class="hero-visual">
-                    <div class="message-thread" id="heroMessageThread"></div>
-                    <div class="calendar-snip hidden" id="heroCalendarSnip">
-                        <span><i class="far fa-calendar-check"></i> Rendez-vous confirmé</span>
-                        <span>➡️ Coordonnées collectées : Marc — 06 •• •• •• •• ✅</span>
+                <div class="chat-wrapper">
+                    <div class="hero-visual">
+                        <div class="message-thread" id="heroMessageThread" aria-live="polite"></div>
+                        <div class="calendar-snip hidden" id="heroCalendarSnip">
+                            <span><i class="far fa-calendar-check"></i> Rendez-vous confirmé</span>
+                            <span>➡️ Coordonnées collectées : Marc — 06 •• •• •• •• ✅</span>
+                        </div>
+                        <p style="font-size:0.85rem;color:var(--muted);text-align:center;margin-top:12px;">
+                            Simulation d’une conversation réelle avec un client
+                        </p>
                     </div>
-                    <p style="font-size:0.85rem;color:var(--muted);text-align:center;margin-top:12px;">
-                        Simulation d’une conversation réelle avec un client
-                    </p>
                 </div>
             </div>
         </div>
@@ -1452,6 +1499,13 @@
     </div>
 
     <script>
+        function scrollChatToBottom() {
+            const visual = document.querySelector('.hero-visual');
+            if (visual) {
+                visual.scrollTop = visual.scrollHeight;
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             document.body.classList.add('loaded');
             document.body.classList.remove('no-js');
@@ -1463,7 +1517,6 @@
             calendarSnip.classList.add('hidden');
             messageThread.innerHTML = '';
 
-            // Messages incluant un message d'accueil pour combler le haut
             const messages = [
                 { role: 'out', avatarImg: 'https://static.wixstatic.com/media/3c8e1e_27544c53a52f4493a5703f6f2a111bd8~mv2.webp', text: 'Bonjour 👋<br>Merci pour votre message.<br>Je suis l’assistant du salon. Je peux vous aider à trouver un créneau.<br><small>Assistant IA · 24/7</small>' },
                 { role: 'in', avatar: '👤', text: 'Bonjour, je souhaiterais prendre rendez-vous pour un devis.' },
@@ -1503,6 +1556,7 @@
                         typingDiv.appendChild(avatar);
                         typingDiv.appendChild(indicator);
                         messageThread.appendChild(typingDiv);
+                        scrollChatToBottom();
                     }, delay);
                     delay += typingDuration;
                     setTimeout(() => {
@@ -1525,6 +1579,7 @@
                         msgDiv.appendChild(avatar);
                         msgDiv.appendChild(bubble);
                         messageThread.appendChild(msgDiv);
+                        scrollChatToBottom();
                     }, delay);
                     delay += messageDuration;
                 } else {
@@ -1540,6 +1595,7 @@
                         msgDiv.appendChild(avatar);
                         msgDiv.appendChild(bubble);
                         messageThread.appendChild(msgDiv);
+                        scrollChatToBottom();
                     }, delay);
                     delay += messageDuration;
                 }
@@ -1547,6 +1603,7 @@
 
             setTimeout(() => {
                 calendarSnip.classList.remove('hidden');
+                scrollChatToBottom();
             }, delay + 1000);
         });
     </script>
