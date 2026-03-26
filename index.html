@@ -18,7 +18,7 @@
     <meta name="twitter:image" content="https://commercants.devchatbotia.app/preview.jpg">
     <meta property="og:site_name" content="DevChatbotIA">
     <meta name="author" content="DevChatbotIA®">
-    <link rel="publisher" href="https://devchatbotia.com"> <!-- micro-optimisation bonus -->
+    <link rel="publisher" href="https://devchatbotia.com">
     <title>Assistant IA commerçant — réponses automatiques clients 24/7 | DevChatbotIA®</title>
 
     <link rel="icon" href="data:,">
@@ -58,7 +58,7 @@
     }
     </script>
 
-    <!-- Google Fonts : preload + onload uniquement, pas de doublon -->
+    <!-- Google Fonts : preload + onload -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -66,7 +66,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <style>
-        /* Tous les styles sont strictement inchangés (déjà validés) */
+        /* Styles strictement inchangés (scrollbar masquée) */
         :root {
             --bg-primary: #ffffff;
             --bg-soft: #faf9f7;
@@ -322,7 +322,7 @@
             color: var(--accent-primary);
         }
 
-        /* === CORRECTIONS LAYOUT HERO PREMIUM === */
+        /* Hero layout */
         .hero {
             display: grid;
             grid-template-columns: 1.1fr 1fr;
@@ -356,18 +356,11 @@
             padding: 28px 32px 40px;
             position: relative;
             width: 100%;
+            scrollbar-width: none;
         }
 
         .hero-visual::-webkit-scrollbar {
-            width: 6px;
-        }
-        .hero-visual::-webkit-scrollbar-track {
-            background: var(--border-light);
-            border-radius: 10px;
-        }
-        .hero-visual::-webkit-scrollbar-thumb {
-            background: var(--accent-glow);
-            border-radius: 10px;
+            display: none;
         }
 
         @media (max-width: 1024px) {
@@ -539,10 +532,6 @@
         .calendar-snip i {
             color: var(--accent-glow);
             font-size: 1.3rem;
-        }
-
-        .calendar-snip i.fa-check-circle {
-            filter: drop-shadow(0 2px 4px rgba(30,126,75,0.3));
         }
 
         .cert-badge {
@@ -1148,8 +1137,8 @@
                     <div class="hero-visual">
                         <div class="message-thread" id="heroMessageThread" aria-live="polite"></div>
                         <div class="calendar-snip hidden" id="heroCalendarSnip">
-                            <span><i class="far fa-calendar-check"></i> Rendez-vous confirmé</span>
-                            <span>➡️ Coordonnées collectées : Marc — 06 •• •• •• •• ✅</span>
+                            <span><i class="fas fa-check-circle"></i> Réservation confirmée</span>
+                            <span>➡️ Jean — ce soir 20h30 (2 pers.) ✓</span>
                         </div>
                         <p style="font-size:0.85rem;color:var(--muted);text-align:center;margin-top:12px;">
                             Simulation d’une conversation réelle avec un client
@@ -1160,7 +1149,7 @@
         </div>
     </section>
 
-    <!-- Le reste du contenu (preuve sociale, problème, solution, étapes, etc.) est strictement inchangé -->
+    <!-- Sections inchangées (preuve sociale, problème, solution, étapes, offre, FAQ, footer) -->
     <section class="section">
         <div class="container" style="text-align: center; max-width: 900px; margin: 0 auto;">
             <div class="badge" style="margin: 0 auto;">Déjà utilisé</div>
@@ -1517,18 +1506,16 @@
             calendarSnip.classList.add('hidden');
             messageThread.innerHTML = '';
 
+            // Scénario restaurant propre et cohérent
             const messages = [
-                { role: 'out', avatarImg: 'https://static.wixstatic.com/media/3c8e1e_27544c53a52f4493a5703f6f2a111bd8~mv2.webp', text: 'Bonjour 👋<br>Merci pour votre message.<br>Je suis l’assistant du salon. Je peux vous aider à trouver un créneau.<br><small>Assistant IA · 24/7</small>' },
-                { role: 'in', avatar: '👤', text: 'Bonjour, je souhaiterais prendre rendez-vous pour un devis.' },
-                { role: 'out', avatarImg: 'https://static.wixstatic.com/media/3c8e1e_27544c53a52f4493a5703f6f2a111bd8~mv2.webp', text: 'Bonjour 👋<br>Avec plaisir. Je peux vous aider à trouver un créneau.<br>Quel type de service recherchez-vous ?<br><small>Assistant IA · 24/7</small>' },
-                { role: 'in', avatar: '👤', text: 'Une prestation de coiffure pour homme, coupe + barbe.' },
-                { role: 'out', avatarImg: 'https://static.wixstatic.com/media/3c8e1e_27544c53a52f4493a5703f6f2a111bd8~mv2.webp', text: 'Très bien 👍<br>Préférez-vous plutôt en matinée ou en après-midi ?' },
-                { role: 'in', avatar: '👤', text: 'Plutôt après-midi, vers 16h.' },
-                { role: 'out', avatarImg: 'https://static.wixstatic.com/media/3c8e1e_27544c53a52f4493a5703f6f2a111bd8~mv2.webp', text: 'Nous avons des disponibilités jeudi et vendredi à 16h.<br>Quel jour vous conviendrait le mieux ?' },
-                { role: 'in', avatar: '👤', text: 'Vendredi 16h, parfait.' },
-                { role: 'out', avatarImg: 'https://static.wixstatic.com/media/3c8e1e_27544c53a52f4493a5703f6f2a111bd8~mv2.webp', text: 'Super 😊<br>Pouvez-vous me communiquer votre prénom et un numéro de téléphone pour confirmer ?' },
-                { role: 'in', avatar: '👤', text: 'Marc — 06 •• •• •• ••' },
-                { role: 'out', avatarImg: 'https://static.wixstatic.com/media/3c8e1e_27544c53a52f4493a5703f6f2a111bd8~mv2.webp', text: 'Merci Marc 👍<br>Votre rendez-vous pour vendredi à 16h est bien enregistré.<br>Un SMS de confirmation vous sera envoyé.<br>Bonne journée 😊<br><br>Si vous avez d’autres questions, je reste disponible.' }
+                { role: 'in', avatar: '👤', text: 'Bonjour, avez-vous des places ce soir ?' },
+                { role: 'out', avatarImg: 'https://static.wixstatic.com/media/3c8e1e_27544c53a52f4493a5703f6f2a111bd8~mv2.webp', text: 'Bonjour 👋<br>Oui, nous avons encore des disponibilités.<br>Pour combien de personnes souhaitez-vous réserver ?<br><small>Assistante IA · 24/7</small>' },
+                { role: 'in', avatar: '👤', text: 'Pour 2 personnes' },
+                { role: 'out', avatarImg: 'https://static.wixstatic.com/media/3c8e1e_27544c53a52f4493a5703f6f2a111bd8~mv2.webp', text: 'Très bien 😊<br>À quelle heure souhaitez-vous venir ?<br><small>Assistante IA · 24/7</small>' },
+                { role: 'in', avatar: '👤', text: 'Vers 20h30' },
+                { role: 'out', avatarImg: 'https://static.wixstatic.com/media/3c8e1e_27544c53a52f4493a5703f6f2a111bd8~mv2.webp', text: 'Parfait 👍<br>J’ai une table disponible à 20h30.<br><br>Pouvez-vous me confirmer :<br>• Votre prénom<br>• Un numéro de téléphone<br><small>Assistante IA · 24/7</small>' },
+                { role: 'in', avatar: '👤', text: 'Jean — 06 12 XX XX 78' },
+                { role: 'out', avatarImg: 'https://static.wixstatic.com/media/3c8e1e_27544c53a52f4493a5703f6f2a111bd8~mv2.webp', text: 'Merci Jean 😊<br><br>✅ Votre réservation pour 2 personnes à 20h30 est confirmée.<br>Nous vous accueillerons avec plaisir ce soir.<br><br>À tout à l’heure 👋<br><small>Assistante IA · 24/7</small>' }
             ];
 
             const typingDuration = 2200;
