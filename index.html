@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#1a2a27">
     <meta name="description" content="Assistant IA pour commerces et artisans : répond automatiquement aux clients (WhatsApp, horaires, prix, réservations). Activation rapide, 19€/mois sans engagement.">
     <link rel="canonical" href="https://commercants.devchatbotia.app/">
@@ -23,7 +23,6 @@
 
     <link rel="icon" href="data:,">
     <link rel="shortcut icon" href="data:,">
-    <!-- Apple touch icon : image neutre pour éviter le blanc sur iOS (icône discrète) -->
     <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%231a2a27'/%3E%3Ctext x='50' y='67' font-size='50' text-anchor='middle' fill='%23b89e6f' font-family='monospace'%3E🤖%3C/text%3E%3C/svg%3E">
 
     <script type="application/ld+json">
@@ -68,7 +67,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <style>
-        /* Tous les styles sont strictement inchangés sauf la scrollbar masquée et la taille du badge */
         :root {
             --bg-primary: #ffffff;
             --bg-soft: #faf9f7;
@@ -109,6 +107,8 @@
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            padding-left: env(safe-area-inset-left);
+            padding-right: env(safe-area-inset-right);
         }
 
         .container {
@@ -219,16 +219,21 @@
             border-radius: 999px;
             text-decoration: none;
             transition: all 0.3s ease;
-            border: none;
-            box-shadow: 0 10px 25px -5px rgba(26,42,39,0.4);
+            border: 1px solid rgba(184,158,111,0.3);
+            box-shadow: 0 10px 25px -5px rgba(26,42,39,0.4), 0 0 0 2px rgba(184,158,111,0.35), 0 0 20px rgba(184,158,111,0.15);
             letter-spacing: -0.01em;
             margin: 15px 0 5px;
-            border: 1px solid rgba(184,158,111,0.3);
+            animation: ctaPulse 3.5s ease-in-out infinite;
+        }
+
+        @keyframes ctaPulse {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-2px); }
         }
 
         .btn-stripe:hover {
             transform: translateY(-3px);
-            box-shadow: 0 20px 30px -8px rgba(184,158,111,0.4);
+            box-shadow: 0 20px 30px -8px rgba(184,158,111,0.4), 0 0 0 2px rgba(184,158,111,0.4), 0 0 30px rgba(184,158,111,0.25);
             background: #0f1d1a;
         }
 
@@ -536,7 +541,6 @@
             font-size: 1.3rem;
         }
 
-        /* BADGE GOOGLE ADS AGRANDI : desktop 140px, mobile 100px, sans distorsion */
         .cert-badge {
             display: flex;
             align-items: center;
@@ -551,12 +555,11 @@
         }
 
         .cert-badge img {
-            width: 140px;         /* desktop */
-            max-width: 30vw;      /* fallback pour très petits écrans */
+            width: 140px;
+            max-width: 30vw;
             height: auto;
             flex-shrink: 0;
             object-fit: contain;
-            padding: 0;
         }
 
         @media (max-width: 768px) {
@@ -566,7 +569,7 @@
                 margin: 16px auto 0;
             }
             .cert-badge img {
-                width: 100px;      /* mobile */
+                width: 100px;
                 max-width: 28vw;
             }
             .cert-badge-text {
@@ -1051,6 +1054,30 @@
             .section { padding: 55px 0 !important; }
         }
 
+        .sticky-cta-desktop {
+            display: none;
+        }
+
+        @media (min-width: 1025px) {
+            .sticky-cta-desktop {
+                display: flex;
+                position: fixed;
+                bottom: calc(24px + env(safe-area-inset-bottom));
+                right: calc(24px + env(safe-area-inset-right));
+                z-index: 1500;
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.25s ease;
+            }
+            .sticky-cta-desktop .btn-stripe {
+                margin: 0;
+                padding: 14px 26px;
+                font-size: 0.95rem;
+                box-shadow: 0 18px 40px -12px rgba(0,0,0,0.25);
+                animation: none;
+            }
+        }
+
         .typing-indicator {
             display: flex;
             align-items: center;
@@ -1078,6 +1105,20 @@
         .hidden {
             display: none !important;
         }
+
+        /* Menu mobile : même méthode que version immobilier */
+        @media (max-width: 1024px) {
+            .navbar {
+                flex-direction: column;
+                gap: 14px;
+                padding: 14px 0;
+            }
+            .nav-links {
+                gap: 18px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
     </style>
 </head>
 <body class="no-js">
@@ -1103,9 +1144,17 @@
                         <i class="fas fa-robot"></i>
                         Assistant IA pour commerçants
                     </div>
+                    <!-- Micro-optimisation 2 : ligne terrain -->
+                    <p style="font-size:0.9rem;color:var(--muted);margin-top:6px;">
+                        Répond automatiquement à vos clients et transforme les demandes en rendez-vous.
+                    </p>
                     <h1>Un assistant IA qui répond à vos clients<br><span style="color: var(--accent-primary); font-weight:700;">pendant que vous travaillez.</span><br><span class="accent-glow">19€/mois, sans engagement.</span></h1>
                     <p style="font-size:1.2rem; font-weight:500; color: var(--accent-primary); margin-bottom:0.5rem;">⚡ Chaque demande sans réponse = un client qui part ailleurs.</p>
-                    <p class="lead">Votre assistant IA répond aux questions de vos clients (horaires, prix, disponibilités) et peut envoyer votre lien de réservation. 24h/24.</p>
+                    <p class="lead">
+                        Vos clients posent des questions. Si vous ne répondez pas immédiatement, ils partent ailleurs.
+                        <br><br>
+                        Votre assistant IA répond à votre place (horaires, prix, disponibilités) et peut envoyer votre lien de réservation. 24h/24.
+                    </p>
 
                     <div class="cert-badge">
                         <img 
@@ -1137,6 +1186,9 @@
                         <span><i class="fas fa-check-circle"></i> Sans engagement</span>
                         <span><i class="fas fa-check-circle"></i> Artisans, boutiques & commerces locaux</span>
                     </div>
+                    <p style="font-size:0.95rem;color:var(--muted);margin-top:10px;">
+                        Assistant IA pour commerces, artisans et services locaux (coiffeurs, restaurants, plombiers…)
+                    </p>
                 </div>
                 <div class="chat-wrapper">
                     <div class="hero-visual">
@@ -1162,8 +1214,9 @@
             <p style="color: var(--text-secondary); margin-bottom: 18px; font-size:1.1rem;">
                 Plus de <strong>1000 conversations clients automatisées</strong> avec les assistants DevChatbotIA®.
             </p>
+            <!-- Micro-optimisation 1 : preuve humaine concrète -->
             <p style="color: var(--text-secondary); margin-bottom: 30px;">
-                Les assistants répondent aux demandes clients et facilitent les réservations.
+                Utilisé par des commerçants en France (salons, instituts, artisans, restaurants…)
             </p>
             <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; font-weight: 500;">
                 <span>💇‍♂️ Salons de coiffure</span>
@@ -1230,7 +1283,8 @@
                             <li><i class="fas fa-check-circle"></i> Répond automatiquement aux questions fréquentes (horaires, prix, informations)</li>
                             <li><i class="fas fa-check-circle"></i> Peut poser quelques questions pour comprendre la demande</li>
                             <li><i class="fas fa-check-circle"></i> Envoie automatiquement votre lien de réservation selon vos disponibilités</li>
-                            <li><i class="fas fa-check-circle"></i> Réponses automatiques sur WhatsApp et Messenger pour les demandes de rendez-vous</li>
+                            <!-- Micro-optimisation 3 : clarification des canaux -->
+                            <li><i class="fas fa-check-circle"></i> Peut être connecté à vos canaux (site, WhatsApp, Messenger…)</li>
                             <li><i class="fas fa-check-circle"></i> Fonctionne 24h/24, même le soir ou le week-end</li>
                             <li><i class="fas fa-check-circle"></i> Vous gardez le contrôle total</li>
                         </ul>
@@ -1381,7 +1435,7 @@
                         <li><i class="fas fa-check-circle"></i> Assistant IA disponible 24h/24</li>
                         <li><i class="fas fa-check-circle"></i> Réponses aux questions clients</li>
                         <li><i class="fas fa-check-circle"></i> Envoi automatique du lien de réservation</li>
-                        <li><i class="fas fa-check-circle"></i> Connexion à votre canal (site web, WhatsApp, Messenger ou messages Instagram)</li>
+                        <li><i class="fas fa-check-circle"></i> Peut être connecté à vos canaux (site, WhatsApp, Messenger…)</li>
                         <li><i class="fas fa-check-circle"></i> Automatisation messages clients et IA réservation commerce</li>
                         <li><i class="fas fa-check-circle"></i> Tableau de bord simple pour suivre les demandes</li>
                         <li><i class="fas fa-check-circle"></i> Paramétrage standard de l'assistant (questions clés sur votre activité)</li>
@@ -1492,6 +1546,12 @@
         </a>
     </div>
 
+    <div class="sticky-cta-desktop">
+        <a href="https://buy.stripe.com/dRmcN52YVdPv6qR0re9AA06?source=commercants" class="btn-stripe" target="_blank" rel="noopener" aria-label="Activer l'assistant IA pour mon commerce">
+           Activer mon assistant IA
+        </a>
+    </div>
+
     <script>
         function scrollChatToBottom() {
             const visual = document.querySelector('.hero-visual');
@@ -1511,7 +1571,6 @@
             calendarSnip.classList.add('hidden');
             messageThread.innerHTML = '';
 
-            // Scénario restaurant propre et cohérent
             const messages = [
                 { role: 'in', avatar: '👤', text: 'Bonjour, avez-vous des places ce soir ?' },
                 { role: 'out', avatarImg: 'https://static.wixstatic.com/media/3c8e1e_27544c53a52f4493a5703f6f2a111bd8~mv2.webp', text: 'Bonjour 👋<br>Oui, nous avons encore des disponibilités.<br>Pour combien de personnes souhaitez-vous réserver ?<br><small>Assistante IA · 24/7</small>' },
@@ -1598,6 +1657,44 @@
                 scrollChatToBottom();
             }, delay + 1000);
         });
+
+        (function(){
+            const stickyMobile = document.querySelector('.sticky-cta');
+            const stickyDesktop = document.querySelector('.sticky-cta-desktop');
+
+            if (stickyMobile) {
+                stickyMobile.style.opacity = '0';
+                stickyMobile.style.pointerEvents = 'none';
+                stickyMobile.style.transition = 'opacity 0.25s ease';
+            }
+            if (stickyDesktop) {
+                stickyDesktop.style.opacity = '0';
+                stickyDesktop.style.pointerEvents = 'none';
+                stickyDesktop.style.transition = 'opacity 0.25s ease';
+            }
+
+            window.addEventListener('scroll', () => {
+                const scrollY = window.scrollY;
+                if (stickyMobile) {
+                    if (scrollY > 400) {
+                        stickyMobile.style.opacity = '1';
+                        stickyMobile.style.pointerEvents = 'auto';
+                    } else {
+                        stickyMobile.style.opacity = '0';
+                        stickyMobile.style.pointerEvents = 'none';
+                    }
+                }
+                if (stickyDesktop) {
+                    if (scrollY > 500) {
+                        stickyDesktop.style.opacity = '1';
+                        stickyDesktop.style.pointerEvents = 'auto';
+                    } else {
+                        stickyDesktop.style.opacity = '0';
+                        stickyDesktop.style.pointerEvents = 'none';
+                    }
+                }
+            });
+        })();
     </script>
 </body>
 </html>
